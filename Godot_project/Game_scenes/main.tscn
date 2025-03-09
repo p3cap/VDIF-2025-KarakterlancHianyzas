@@ -1,0 +1,230 @@
+[gd_scene load_steps=8 format=3 uid="uid://dgd6ibybjhc11"]
+
+[ext_resource type="Script" uid="uid://c3a3ot7fs0dyw" path="res://game_scripts/main.gd" id="1_nm1x0"]
+[ext_resource type="Script" uid="uid://blxy1p5vwiq4g" path="res://game_scripts/camera.gd" id="2_i07k5"]
+[ext_resource type="Script" uid="uid://do4biv8raceld" path="res://tool_scripts/builder_tool.gd" id="2_pbrlt"]
+[ext_resource type="Script" uid="uid://c30e5stsqral7" path="res://game_scripts/ui.gd" id="3_pbrlt"]
+[ext_resource type="FontFile" uid="uid://c4mm3of2mc8o5" path="res://addons/phantom_camera/fonts/Nunito-Black.ttf" id="5_6drc5"]
+[ext_resource type="PackedScene" uid="uid://bayfenc3xxjah" path="res://terrain_presets/plains.tscn" id="6_vsyia"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_vsyia"]
+font = ExtResource("5_6drc5")
+outline_size = 2
+outline_color = Color(0, 0, 0, 1)
+
+[node name="Main" type="Node2D"]
+script = ExtResource("1_nm1x0")
+
+[node name="GUI" type="CanvasLayer" parent="."]
+
+[node name="UI" type="Control" parent="GUI"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("3_pbrlt")
+
+[node name="Menu" type="GridContainer" parent="GUI/UI"]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 100.0
+grow_vertical = 2
+
+[node name="PreMade" type="Button" parent="GUI/UI/Menu"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+text = "Pre Mades
+"
+autowrap_mode = 3
+
+[node name="Builder" type="Button" parent="GUI/UI/Menu"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+text = "Custom Build"
+autowrap_mode = 3
+
+[node name="Terrain" type="Button" parent="GUI/UI/Menu"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+text = "Terrain Maker"
+autowrap_mode = 3
+
+[node name="Logs" type="Button" parent="GUI/UI/Menu"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+text = "Logs / stats
+"
+autowrap_mode = 3
+
+[node name="Terrain" type="Panel" parent="GUI/UI"]
+visible = false
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 1.0
+offset_top = -102.0
+offset_right = 1.0
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="make_terrain" type="Button" parent="GUI/UI/Terrain"]
+layout_mode = 2
+offset_left = 982.0
+offset_top = 11.0
+offset_right = 1123.0
+offset_bottom = 91.0
+text = "Generate Terrain"
+
+[node name="OptionButton" type="OptionButton" parent="GUI/UI/Terrain"]
+layout_mode = 0
+offset_left = 754.0
+offset_top = 34.0
+offset_right = 934.0
+offset_bottom = 65.0
+autowrap_mode = 3
+selected = 0
+allow_reselect = true
+item_count = 4
+popup/item_0/text = "Island"
+popup/item_0/id = 0
+popup/item_1/text = "Mountains"
+popup/item_1/id = 1
+popup/item_2/text = "Plains"
+popup/item_2/id = 2
+popup/item_3/text = "Desert"
+popup/item_3/id = 3
+
+[node name="Builder" type="Panel" parent="GUI/UI"]
+visible = false
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 1.0
+offset_top = -102.0
+offset_right = 1.0
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="PreMade" type="Panel" parent="GUI/UI"]
+visible = false
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 1.0
+offset_top = -102.0
+offset_right = 1.0
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="Logs" type="Panel" parent="GUI/UI"]
+visible = false
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 1.0
+offset_top = -102.0
+offset_right = 1.0
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="View" type="GridContainer" parent="GUI/UI"]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -100.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="Terrain" type="Button" parent="GUI/UI/View"]
+custom_minimum_size = Vector2(100, 50)
+layout_mode = 2
+text = "Terrain"
+autowrap_mode = 3
+
+[node name="Administrative" type="Button" parent="GUI/UI/View"]
+custom_minimum_size = Vector2(100, 50)
+layout_mode = 2
+text = "Administrative"
+autowrap_mode = 3
+
+[node name="Satellite" type="Button" parent="GUI/UI/View"]
+custom_minimum_size = Vector2(100, 50)
+layout_mode = 2
+text = "Satellite"
+autowrap_mode = 3
+
+[node name="Camera2D" type="Camera2D" parent="."]
+script = ExtResource("2_i07k5")
+
+[node name="Buildings" type="Node2D" parent="."]
+
+[node name="Building_Sample" type="Area2D" parent="Buildings"]
+position = Vector2(-135, -193)
+script = ExtResource("2_pbrlt")
+
+[node name="Dot1" type="ColorRect" parent="Buildings/Building_Sample"]
+z_index = 1
+layout_direction = 1
+offset_left = -21.0
+offset_top = -16.0
+offset_right = -11.0
+offset_bottom = -6.0
+
+[node name="Dot2" type="ColorRect" parent="Buildings/Building_Sample"]
+z_index = 1
+layout_direction = 1
+offset_left = 266.0
+offset_top = -37.0
+offset_right = 276.0
+offset_bottom = -27.0
+
+[node name="Dot3" type="ColorRect" parent="Buildings/Building_Sample"]
+z_index = 1
+layout_direction = 1
+offset_left = 263.0
+offset_top = 98.0
+offset_right = 273.0
+offset_bottom = 108.0
+
+[node name="Dot4" type="ColorRect" parent="Buildings/Building_Sample"]
+z_index = 1
+layout_direction = 1
+offset_left = -15.0
+offset_top = 111.0
+offset_right = -5.0
+offset_bottom = 121.0
+
+[node name="Shape" type="Polygon2D" parent="Buildings/Building_Sample"]
+color = Color(0.601223, 0.601223, 0.601223, 1)
+polygon = PackedVector2Array(-16, -11, 271, -32, 268, 103, -10, 116)
+
+[node name="Collision" type="CollisionPolygon2D" parent="Buildings/Building_Sample"]
+polygon = PackedVector2Array(-16, -11, 271, -32, 268, 103, -10, 116)
+
+[node name="Label" type="Label" parent="Buildings/Building_Sample"]
+offset_left = 73.2857
+offset_top = 25.1429
+offset_right = 205.286
+offset_bottom = 48.1429
+text = "Building_Sample"
+label_settings = SubResource("LabelSettings_vsyia")
+
+[node name="Plains_preset" parent="." instance=ExtResource("6_vsyia")]
+position = Vector2(-1676, -850)
