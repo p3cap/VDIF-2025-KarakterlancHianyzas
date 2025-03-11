@@ -1,19 +1,18 @@
-[gd_scene load_steps=8 format=3 uid="uid://dgd6ibybjhc11"]
+[gd_scene load_steps=8 format=3 uid="uid://df32doojj8605"]
 
-[ext_resource type="Script" uid="uid://c3a3ot7fs0dyw" path="res://game_scripts/main.gd" id="1_nm1x0"]
-[ext_resource type="Script" uid="uid://blxy1p5vwiq4g" path="res://game_scripts/camera.gd" id="2_i07k5"]
-[ext_resource type="Script" uid="uid://do4biv8raceld" path="res://tool_scripts/builder_tool.gd" id="2_pbrlt"]
-[ext_resource type="Script" uid="uid://c30e5stsqral7" path="res://game_scripts/ui.gd" id="3_pbrlt"]
-[ext_resource type="FontFile" uid="uid://c4mm3of2mc8o5" path="res://addons/phantom_camera/fonts/Nunito-Black.ttf" id="5_6drc5"]
-[ext_resource type="PackedScene" uid="uid://bayfenc3xxjah" path="res://terrain_presets/plains.tscn" id="6_vsyia"]
+[ext_resource type="Script" uid="uid://jf6kfptxkg5h" path="res://scripts/CameraController.cs" id="1_dmkxd"]
+[ext_resource type="Script" uid="uid://v2jxv3fj3qmm" path="res://scripts/Main.cs" id="1_qs5e2"]
+[ext_resource type="Script" uid="uid://bto1m0xy85a6s" path="res://scripts/Buildings/Building.cs" id="1_vqs83"]
+[ext_resource type="Script" uid="uid://bwnxh4sbg8b48" path="res://scripts/Data/Stats.cs" id="3_nvkn0"]
+[ext_resource type="Script" uid="uid://c7j74dtmy81md" path="res://scripts/Buildings/Mover.cs" id="4_yjxaj"]
+[ext_resource type="Script" uid="uid://dmsldr1qilrha" path="res://scripts/Data/Data.cs" id="5_7udj3"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_vsyia"]
-font = ExtResource("5_6drc5")
 outline_size = 2
 outline_color = Color(0, 0, 0, 1)
 
 [node name="Main" type="Node2D"]
-script = ExtResource("1_nm1x0")
+script = ExtResource("1_qs5e2")
 
 [node name="GUI" type="CanvasLayer" parent="."]
 
@@ -24,7 +23,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("3_pbrlt")
 
 [node name="Menu" type="GridContainer" parent="GUI/UI"]
 layout_mode = 1
@@ -171,13 +169,14 @@ text = "Satellite"
 autowrap_mode = 3
 
 [node name="Camera2D" type="Camera2D" parent="."]
-script = ExtResource("2_i07k5")
+position = Vector2(577, 324)
+script = ExtResource("1_dmkxd")
 
 [node name="Buildings" type="Node2D" parent="."]
 
 [node name="Building_Sample" type="Area2D" parent="Buildings"]
-position = Vector2(-135, -193)
-script = ExtResource("2_pbrlt")
+position = Vector2(454, 289)
+script = ExtResource("1_vqs83")
 
 [node name="Dot1" type="ColorRect" parent="Buildings/Building_Sample"]
 z_index = 1
@@ -186,30 +185,25 @@ offset_left = -21.0
 offset_top = -16.0
 offset_right = -11.0
 offset_bottom = -6.0
+script = ExtResource("4_yjxaj")
 
 [node name="Dot2" type="ColorRect" parent="Buildings/Building_Sample"]
 z_index = 1
 layout_direction = 1
-offset_left = 266.0
-offset_top = -37.0
-offset_right = 276.0
-offset_bottom = -27.0
+offset_left = 172.0
+offset_top = -105.0
+offset_right = 182.0
+offset_bottom = -95.0
+script = ExtResource("4_yjxaj")
 
 [node name="Dot3" type="ColorRect" parent="Buildings/Building_Sample"]
 z_index = 1
 layout_direction = 1
-offset_left = 263.0
-offset_top = 98.0
-offset_right = 273.0
-offset_bottom = 108.0
-
-[node name="Dot4" type="ColorRect" parent="Buildings/Building_Sample"]
-z_index = 1
-layout_direction = 1
-offset_left = -15.0
-offset_top = 111.0
-offset_right = -5.0
-offset_bottom = 121.0
+offset_left = 278.0
+offset_top = -1.0
+offset_right = 288.0
+offset_bottom = 9.0
+script = ExtResource("4_yjxaj")
 
 [node name="Shape" type="Polygon2D" parent="Buildings/Building_Sample"]
 color = Color(0.601223, 0.601223, 0.601223, 1)
@@ -226,5 +220,8 @@ offset_bottom = 48.1429
 text = "Building_Sample"
 label_settings = SubResource("LabelSettings_vsyia")
 
-[node name="Plains_preset" parent="." instance=ExtResource("6_vsyia")]
-position = Vector2(-1676, -850)
+[node name="Stats" type="Node" parent="."]
+script = ExtResource("3_nvkn0")
+
+[node name="Data" type="Node" parent="."]
+script = ExtResource("5_7udj3")
