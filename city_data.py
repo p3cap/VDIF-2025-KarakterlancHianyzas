@@ -1,5 +1,6 @@
 #simuláció konstansok
 sim_const = {
+  "currency_type": "HUF",
 	"illnes_chance": 0.01,
 	"days_per_round": 30,
 }
@@ -9,6 +10,7 @@ sim_data = {
 	"currency": 1000000000,
 	"buildings": [],
 	"citizens": [],
+	"current_date": None,
 
 	"round": 0,
 }
@@ -26,10 +28,18 @@ class Building: #épület azonosító, név, típus (pl. lakóház, iskola), ép
 		self.stories = _stories
 		self.reliability = _reliability
 		self.type = _type
+		self.age = self.get_age #will call function everytime varible called
 		self.name = "N/A"
-		self.age = 0 #_built??
 		self.quality = 100
 		self.upgrades = {}
+	def get_age(self):
+		if self.built or sim_data["current_date"]: return None
+		return sim_data["current_date"] - self.built
+	def upgrade(upg):
+		for key in upg:
+			log_upg = {key:1000}
+
+
 
 class Upgrade:#szolgáltatás azonosító, név, típus (pl. egészségügy, közlekedés), kapcsolódó épület azonosítója. 
 #					            ^               will be in the buildigs upgarde list           ^
@@ -46,6 +56,17 @@ class Citizen: #lakos azonosító, név, születési év, foglalkozás, lakóhel
 		self.born = _born
 		self.job = _job
 		self.houseID = _houseID
+
+class colors:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKCYAN = '\033[96m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
 
 buildings = { #_cost:int, _space:int, _stories:int, _reliability(megbizhatóság), _type:str
 	"kádárkocka": Building(_cost=4000000, _space=150, _stories=1, _reliability=98.8, _type="lakossági"),
