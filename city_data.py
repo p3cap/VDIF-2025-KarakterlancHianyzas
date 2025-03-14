@@ -3,10 +3,12 @@ sim_const = {
   "currency_type": "HUF",
 	"illnes_chance": 0.01,
 	"days_per_round": 30,
+	"min_hapiness": 50,
+	"max_hapiness": 100
 }
 #simuláció adatai
 sim_data = {
-	"happiness": 70,
+	"happiness": sim_const["min_hapiness"],
 	"currency": 1000000000,
 	"buildings": [],
 	"citizens": [],
