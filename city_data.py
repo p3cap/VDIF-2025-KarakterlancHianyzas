@@ -8,6 +8,7 @@ sim_const = {
 	"max_hapiness": 100,
 	"max_days": 300
 }
+
 #simuláció adatai
 sim_data = {
 	"hapiness": sim_const["min_hapiness"],
@@ -45,6 +46,7 @@ class Building: #épület azonosító, név, típus (pl. lakóház, iskola), ép
 			
 		for key in upg:
 			log_upg = {key:{"start":time.time(),"time_remains":upg[key].build_days}}
+		return "-- todo: finish upgrade --"
 
 
 
@@ -64,6 +66,7 @@ class Citizen: #lakos azonosító, név, születési év, foglalkozás, lakóhel
 		self.job = _job
 		self.houseID = _houseID
 
+#terminal colors
 class colors:
     HEADER = '\033[95m'
     OKBLUE = '\033[94m'

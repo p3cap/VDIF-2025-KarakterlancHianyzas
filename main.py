@@ -44,8 +44,23 @@ def show_reports():
 
 def build():
   new_building = foolproof_input("Mit akarsz építeni:",info.buildings.keys())
-  if new_building: 
-    print(info.buildings[new_building])
+  building_name = foolproof_input("Épület neve",info.buildings.keys())
+  if new_building and building_name: 
+    info.sim_data.buildings.append()
+
+def upgrade_building(): #NOT WORKING YET!!!!!
+  building = info.sim_data.buildings.get(foolproof_input("Melyik épületet fejleszted (ID):",info.buildings.keys())) #get ID and check for those
+  valid_upgrades = []
+  for upg_name, upg in info.upgrades.items():
+    if all(req in building.features for req in upg.min_req):
+      valid_upgrades.append(upg_name)
+
+  if not valid_upgrades:
+      print("Nincsenek elérhető fejlesztések ehhez az épülethez.")
+      return
+
+  upgrade = info.upgrades.get(foolproof_input("Melyik fejleszést használod:",valid_upgrades))
+  building.upgrade
 
 def help_actions():
   for key, (func, description) in choices.items(): print(f"{key} [{key[0]}] {description}")
@@ -64,8 +79,10 @@ choices = {
   "info": [show_info, "Szimulációs Információk"],
   "jeln": [show_reports, "A jelenlegi kör jelentései (lakosok,panaszok,stb..) mutataja meg"],
   "epit": [build, "Épület építése"],
+  "upgr": [upgrade_building, "Épület fejlesztése/felújjítása"],
   "next": [next_round, "Következő kör"],
 }
+
 #end
 def checkEnd():
   global simulating
