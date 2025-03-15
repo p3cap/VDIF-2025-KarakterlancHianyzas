@@ -1,14 +1,16 @@
+import time
+
 #simuláció konstansok
 sim_const = {
   "currency_type": "HUF",
-	"illnes_chance": 0.01,
 	"days_per_round": 30,
 	"min_hapiness": 50,
-	"max_hapiness": 100
+	"max_hapiness": 100,
+	"max_days": 300
 }
 #simuláció adatai
 sim_data = {
-	"happiness": sim_const["min_hapiness"],
+	"hapiness": sim_const["min_hapiness"],
 	"currency": 1000000000,
 	"buildings": [],
 	"citizens": [],
@@ -32,14 +34,17 @@ class Building: #épület azonosító, név, típus (pl. lakóház, iskola), ép
 		self.type = _type
 		self.age = self.get_age #will call function everytime varible called
 		self.name = "N/A"
-		self.quality = 100
+		self.quality = 5.0
 		self.upgrades = {}
 	def get_age(self):
 		if self.built or sim_data["current_date"]: return None
 		return sim_data["current_date"] - self.built
-	def upgrade(upg):
+	def upgrade(self,upg):
+		for key in self.upgrades:
+			if self.upgrades[key]["time_remains"] > 0: return "egszerre csak egy fejleszést lehet csinálni."
+			
 		for key in upg:
-			log_upg = {key:1000}
+			log_upg = {key:{"start":time.time(),"time_remains":upg[key].build_days}}
 
 
 
@@ -71,11 +76,11 @@ class colors:
     UNDERLINE = '\033[4m'
 
 buildings = { #_cost:int, _space:int, _stories:int, _reliability(megbizhatóság), _type:str
-	"kádárkocka": Building(_cost=4000000, _space=150, _stories=1, _reliability=98.8, _type="lakossági"),
+	"ház": Building(_cost=4000000, _space=150, _stories=1, _reliability=98.8, _type="lakossági"),
 	"ikerház": Building(_cost=7500000, _space=300, _stories=1, _reliability=98.8, _type="lakossági"),
 	"lakótelep": Building(_cost=900000000, _space=60000, _stories=10, _reliability=89.2, _type="lakossági"),
 
-	"kis rendelő": Building(_cost=340000, _space=100, _stories=1, _reliability=92.8, _type="egészségügy"),
+	"mini rendelő": Building(_cost=340000, _space=100, _stories=1, _reliability=92.8, _type="egészségügy"),
   "kórház": Building(_cost=280000000, _space=5000, _stories=4, _reliability=89.9, _type="egészségügy"),
   
   "óvoda": Building(_cost=325000000, _space=500, _stories=2, _reliability=93.9, _type="iskola"),
@@ -83,9 +88,9 @@ buildings = { #_cost:int, _space:int, _stories:int, _reliability(megbizhatóság
 }
 
 upgrades = {#_cost(ft), _build_days(napban), _per_100(méretarányos), _effects(hatásai)
-	"energetikai korszerűsítés": Upgrade(_cost=3000000, _build_days=150, _per_100=True, _min_requirements={"age":5}, _effects={"quality": 10, "reliability": 20}),
+	"energetikai korszerűsítés": Upgrade(_cost=3000000, _build_days=150, _per_100=True, _min_requirements={"age":5}, _effects={"quality": 3, "reliability": 20}),
 	"bővítés": Upgrade(_cost=300000, _build_days=30, _per_100=True, _min_requirements={}, _effects={"space": 30}),
-	"szigetelés": Upgrade(_cost=300000, _build_days=30, _per_100=True, _min_requirements={}, _effects={"quality": 50}),
+	"szigetelés": Upgrade(_cost=300000, _build_days=30, _per_100=True, _min_requirements={}, _effects={"quality": 2.5}),
 	"tetőcsere": Upgrade(_cost=300000, _build_days=30, _per_100=True, _min_requirements={}, _effects={"reliability": 30}),
-	"lift beépítés": Upgrade(_cost=5000000, _build_days=60, _per_100=False, _min_requirements={"stories":2}, _effects={"quality": 50})
+	"lift beépítés": Upgrade(_cost=5000000, _build_days=60, _per_100=False, _min_requirements={"stories":2}, _effects={"quality": 2.5})
 }
