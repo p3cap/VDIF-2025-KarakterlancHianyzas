@@ -1,25 +1,31 @@
-import main, log_export
+import log_export, main
+# Menu tree
 
-# menu tree
 menu_tree = {
-    "desc":"Sziti építő OS", 
-    "actions":{
-        "new_save": [log_export.import_city, "Create a new save"],
-            "cvs adatok": {
-                "desc": "Adatok importálása, exportálása",
-                "actions": {
-                    "city import": [log_export.import_city, "Importálja a város konfigurációt CVS file-ba"],
-                    "export city": [log_export.export_city, "Exportálja a város konfigurációt CVS file-ból"],
-                    "make buildings": [log_export.import_buildings, "Speciális épület létrehozása"],
-                    "buildings import": [log_export.import_buildings, "Importálja a létrehozható épületeket CVS file-ba"],
-                    "_export buildings": [log_export.export_buildings, "Exportálja a létrehozható épületeket CVS file-ból"]
-                }
+    "desc": "Sziti építő OS",
+    "actions": {
+        "start simulation": {"desc": "interaktív szimuláció elkezdődött",
+            "actions": {
+				"info": [main.show_info, "Szimulációs Információk"],
+				"jeln": [main.show_reports, "A jelenlegi kör jelentései (lakosok,panaszok,stb..) mutataja meg"],
+				"epit": [main.build, "Épület építése"],
+				"upgr": [main.upgrade_building, "Épület fejlesztése/felújjítása"],
+				"next": [main.next_round, "Következő kör leszimulálása x db nap"],
             }
-        }
+        },
+        "cvs adatok": {"desc": "CVS-file alapú, speciális épületek, városok importálása, exportálása",
+            "actions": {
+                "import_city": (log_export.import_city, "Importálja a város konfigurációt CVS-ből"),
+                "export_city": (log_export.export_city, "Exportálja a jelenlegi város konfigurációt CVS-be"),
+                "import_buildings": (log_export.import_buildings, "Importálja az épületeket CVS-ből"),
+                "export_buildings": (log_export.export_buildings, "Exportálja a jelenlegi épületeket CVS-be")
+            }
+        },
     }
+}
 
-#treminal colors
-class colors:
+# Terminal colors
+class Colors:
     HEADER = '\033[95m'
     OKBLUE = '\033[94m'
     OKCYAN = '\033[96m'
@@ -35,34 +41,38 @@ def format_number(amount):
             return f"{amount:.2f}{unit}".rstrip('0').rstrip('.')
         amount /= 1000
 
-def exit_action(): print(f"{colors.FAIL}-megszakítva-{colors.ENDC}")
+def exit_action():
+    print(f"{Colors.FAIL}-megszakítva-{Colors.ENDC}")
 
-def foolproof_input(text:str, choices:dict):
-    shortcuts = {key[0]: key for key in choices.keys()}  # shortcut (első betű)
-    shortcuts.update({"h": "help", "x": "exit"})  # Kilépés, help
+def foolproof_input(prompt, choices):
+    shortcuts = {key[0]: key for key in choices.keys()}  # Shortcut (first letter)
+    shortcuts.update({"h": "help", "x": "exit"})  # Add help and exit shortcuts
     options = ', '.join([f"{act} [{shortcut}]" for shortcut, act in shortcuts.items()])
+    
     while True:
-        inp = input(f"\n{colors.BOLD}Opciók: {options}{colors.ENDC}\n{text}").lower()
-
-        if inp in ["x", "exit"]: #kilepes
-            print(f"{colors.FAIL}-megszakítva-{colors.ENDC}")
+        inp = input(f"\n{Colors.BOLD}Opciók: {options}{Colors.ENDC}\n{prompt}").lower()
+        if inp in ["x", "exit"]:  # Exit
+            exit_action()
             return None
-        elif inp in ["h", "help"]: #help
-            for key, (_ , description) in choices.items():
-                print(f"{key} [{key["desc"]}] {description}")
-        elif inp in choices:  return inp # valid
-        elif inp in shortcuts: return choices[shortcuts[inp]] # shortcut valid
-        else:print(f"{colors.WARNING}Please choose one of the options{colors.ENDC}") #invalid
-
+        elif inp in ["h", "help"]:  # Help
+            for key, value in choices.items():
+                description = value[1] if value is tuple else value.get("desc", "")
+                print(f"{key} [{key[0]}]: {description}")
+        
+        elif inp in choices: return inp # Valid choice
+        elif inp in shortcuts: return shortcuts[inp] #valid shortcut
+        else: print(f"{Colors.WARNING}Please choose one of the options{Colors.ENDC}")  # Invalid choice
 
 def open_menu(menu):
-    print(f"{colors.OKGREEN}{menu["desc"]}{colors.ENDC}")
-    action = foolproof_input("What to do:", menu["actions"])
-    if not action: return
-    action = menu["action"][action]
-    if action is list:
-        action[0]()
-    elif action is dict:
-        open_menu(action)
+    print(f"{Colors.OKGREEN}{menu['desc']}{Colors.ENDC}")
+    while True:
+        action_key = foolproof_input("Választás: ", menu["actions"])
+        if action_key is None:
+            return
+        selected = menu["actions"][action_key]
+        if selected is dict:  # Submenu
+            open_menu(selected)
+        else:  # Execute action
+            selected[0]()
 
 open_menu(menu_tree)
