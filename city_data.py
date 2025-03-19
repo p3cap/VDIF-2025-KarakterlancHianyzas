@@ -40,14 +40,22 @@ class Building: #épület azonosító, név, típus (pl. lakóház, iskola), ép
 	def update(self):
 		self.age = self.built - None
 		for upg in self.upgrades:
-			upg
+			if upg.
 	def upgrade(self,upg):
 		for key in self.upgrades:
 			if self.upgrades[key]["time_remains"] > 0: return "egszerre csak egy fejleszést lehet csinálni."
 			
-		for key in upg:
-			log_upg = {key:{"start":None,"time_remains":upg[key].build_days}}
-			self.upgrades
+		
+
+
+	def get_valid_upgs(self):
+		valid_upgrades = []
+		dict_building = vars(self)
+		for key, upg in upgrades.items():
+			dict_upg = vars(upg)
+			if dict_upg[key] <= dict_building[key]:
+				valid_upgrades.append(key)
+		return valid_upgrades
 
 
 class Upgrade:#szolgáltatás azonosító, név, típus (pl. egészségügy, közlekedés), kapcsolódó épület azonosítója. 
@@ -58,6 +66,7 @@ class Upgrade:#szolgáltatás azonosító, név, típus (pl. egészségügy, kö
 		self.per_100 = _per_100
 		self.min_req = _min_requirements
 		self.effect = _effects
+		self.started = 0
 
 class Citizen: #lakos azonosító, név, születési év, foglalkozás, lakóhely (kapcsolat az Épületek táblával). 
 	def __init__(self, _ID:int, _born:int, _job:str, _houseID:int):

@@ -1,21 +1,22 @@
 import main, log_export
 
 # menu tree
-menu_tree = {"desc":"Sziti építő OS", 
-  "actions":{
-    "new_save": [log_export.import_city, "Create a new save"],
-		"cvs adatok": {
-			"desc": "Adatok importálása, exportálása",
-			"actions": {
-				"city import": [log_export.import_city, "Importálja a város konfigurációt CVS file-ba"],
-				"export city": [log_export.export_city, "Exportálja a város konfigurációt CVS file-ból"],
-				"make buildings": [log_export.import_buildings, "Speciális épület létrehozása"],
-				"buildings import": [log_export.import_buildings, "Importálja a létrehozható épületeket CVS file-ba"],
-				"_export buildings": [log_export.export_buildings, "Exportálja a létrehozható épületeket CVS file-ból"]
-			}
-		}
-	}
-}
+menu_tree = {
+    "desc":"Sziti építő OS", 
+    "actions":{
+        "new_save": [log_export.import_city, "Create a new save"],
+            "cvs adatok": {
+                "desc": "Adatok importálása, exportálása",
+                "actions": {
+                    "city import": [log_export.import_city, "Importálja a város konfigurációt CVS file-ba"],
+                    "export city": [log_export.export_city, "Exportálja a város konfigurációt CVS file-ból"],
+                    "make buildings": [log_export.import_buildings, "Speciális épület létrehozása"],
+                    "buildings import": [log_export.import_buildings, "Importálja a létrehozható épületeket CVS file-ba"],
+                    "_export buildings": [log_export.export_buildings, "Exportálja a létrehozható épületeket CVS file-ból"]
+                }
+            }
+        }
+    }
 
 #treminal colors
 class colors:
