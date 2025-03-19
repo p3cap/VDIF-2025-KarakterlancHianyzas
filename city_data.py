@@ -40,13 +40,10 @@ class Building: #épület azonosító, név, típus (pl. lakóház, iskola), ép
 	def update(self):
 		self.age = self.built - None
 		for upg in self.upgrades:
-			if upg.
+			upg.build_days = upg.started - 0 #timehere
 	def upgrade(self,upg):
 		for key in self.upgrades:
 			if self.upgrades[key]["time_remains"] > 0: return "egszerre csak egy fejleszést lehet csinálni."
-			
-		
-
 
 	def get_valid_upgs(self):
 		valid_upgrades = []
