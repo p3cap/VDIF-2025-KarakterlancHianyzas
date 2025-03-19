@@ -26,7 +26,7 @@ logbook = []
 
 class Building: #épület azonosító, név, típus (pl. lakóház, iskola), építés éve, hasznos terület. 
 	building_types = ["lakóház","munkahely","egészségügy","iskola","közlekedés"]
-	def __init__(self, _cost_M:int, _area:int, _stories:int, _reliability:float, _type:str):
+	def __init__(self, _cost_M:int, _area:int, _stories:int, _reliability:float, _type:str, _restauration_cost:dict, _restauration_days:int):
 		self.built = None
 		self.cost = _cost_M
 		self.area = _area
@@ -36,6 +36,8 @@ class Building: #épület azonosító, név, típus (pl. lakóház, iskola), ép
 		self.age = 0
 		self.name = "N/A"
 		self.quality = 5.0
+		self.restauration_cost = _restauration_cost
+		self.restauration_days = _restauration_days
 		self.upgrades = {}
 	def update(self):
 		self.age = self.built - None
@@ -65,6 +67,13 @@ class Upgrade:#szolgáltatás azonosító, név, típus (pl. egészségügy, kö
 		self.effect = _effects
 		self.started = 0
 
+class Disaster:
+	def __init__(self, _hapiness_decrease:int, _per_100:bool, _stranght:dict, _chance:float):
+		self.per_100 = _per_100
+		self.stranght = _stranght
+		self.hapiness_decrease = _hapiness_decrease
+		self.chance = _chance
+
 class Citizen: #lakos azonosító, név, születési év, foglalkozás, lakóhely (kapcsolat az Épületek táblával). 
 	def __init__(self, _ID:int, _born:int, _job:str, _houseID:int):
 		self.ID = _ID
@@ -91,3 +100,10 @@ upgrades = {#_cost_M(millio), _build_days(napban), _per_100(méretarányos), _ef
 	"tetőcsere": Upgrade(_cost_M=3, _build_days=30, _per_100=True, _min_requirements={}, _effects={"reliability": 30}),
 	"lift beépítés": Upgrade(_cost_M=5, _build_days=60, _per_100=False, _min_requirements={"stories":2}, _effects={"quality": 2.5})
 }
+disasters = {# _stranght(a katasztrófa mértéke), _hapiness_decrease(boldogság csökkenése), _chance(esély a bekövetkezésre)
+	"cunami": Disaster( _stranght=4, _hapiness_decrease=28, _chance=0.22),
+	"tornádó": Disaster( _stranght=3, _hapiness_decrease=30, _chance=0.33),
+	"tűz": Disaster( _stranght=2, _hapiness_decrease=10,_chance=0.80),
+	"bombázás": Disaster( _stranght=4, _hapiness_decrease=35, _chance=0.41),
+	"vulkán": Disaster( _stranght=5, _hapiness_decrease=25, _chance=0.09)}
+
