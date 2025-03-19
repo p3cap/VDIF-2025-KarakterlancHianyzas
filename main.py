@@ -1,4 +1,4 @@
-import random, log_export, os, datetime
+import random, os, datetime
 import city_data as info
 import navigator as ui
 
@@ -45,8 +45,11 @@ def upgrade_building(): #NOT WORKING YET!!!!!
 		print("Nincsenek elérhető fejlesztések ehhez az épülethez.")
 		return None
 
-
-
+def disaster():
+	chances = [info.disaster.chance for info.disaster in info.disasters.values()]
+	dis = random.choices(list(info.disasters.keys()), weights=chances)[0]
+	if dis != "nincs katasztrófa":
+		print("szia")
 #end
 def checkEnd():
 	global simulating

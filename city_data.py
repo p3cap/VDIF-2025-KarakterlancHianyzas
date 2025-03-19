@@ -105,5 +105,7 @@ disasters = {# _stranght(a katasztrófa mértéke), _hapiness_decrease(boldogsá
 	"tornádó": Disaster( _stranght=3, _hapiness_decrease=30, _chance=0.33),
 	"tűz": Disaster( _stranght=2, _hapiness_decrease=10,_chance=0.80),
 	"bombázás": Disaster( _stranght=4, _hapiness_decrease=35, _chance=0.41),
-	"vulkán": Disaster( _stranght=5, _hapiness_decrease=25, _chance=0.09)}
+	"vulkán": Disaster( _stranght=5, _hapiness_decrease=25, _chance=0.09),
+	"nincs katasztrófa": Disaster(_chance=2)
+	}
 
