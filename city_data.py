@@ -26,7 +26,7 @@ logbook = []
 
 class Building: #épület azonosító, név, típus (pl. lakóház, iskola), építés éve, hasznos terület. 
 	building_types = ["lakóház","munkahely","egészségügy","iskola","közlekedés"]
-	def __init__(self, _cost_M:int, _area:int, _stories:int, _reliability:float, _type:str, _restauration_cost:dict, _restauration_days:int):
+	def __init__(self, _cost_M:int, _area:int, _stories:int, _reliability:float, _type:str):
 		self.built = None
 		self.cost = _cost_M
 		self.area = _area
@@ -36,8 +36,6 @@ class Building: #épület azonosító, név, típus (pl. lakóház, iskola), ép
 		self.age = 0
 		self.name = "N/A"
 		self.quality = 5.0
-		self.restauration_cost = _restauration_cost
-		self.restauration_days = _restauration_days
 		self.upgrades = {}
 	def update(self):
 		self.age = self.built - None
@@ -68,7 +66,7 @@ class Upgrade:#szolgáltatás azonosító, név, típus (pl. egészségügy, kö
 		self.started = 0
 
 class Disaster:
-	def __init__(self, _hapiness_decrease:int, _per_100:bool, _stranght:dict, _chance:float):
+	def __init__(self, _hapiness_decrease:int=0, _per_100:bool=False, _stranght:dict=1, _chance:float=0):
 		self.per_100 = _per_100
 		self.stranght = _stranght
 		self.hapiness_decrease = _hapiness_decrease
