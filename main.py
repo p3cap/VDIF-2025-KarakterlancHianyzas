@@ -1,65 +1,49 @@
-import random, os, datetime
+import random, os, datetime, events, log_export
 import city_data as info
-import navigator as ui
 
-#választható dologok
-def show_info():
-	currency_type = info.sim_const["currency_type"]
-	print(info.colors.HEADER,  "-"*10,"info","-"*10  ,info.colors.ENDC) #line
-	print("Maximum nap:",info.sim_const["max_days"])
-	print("Egy körben eltelő napok száma:",info.sim_const["days_per_round"])
-	print("Eltelt körök száma:",info.sim_data["round"],f"({info.sim_data["round"]*info.sim_const["days_per_round"]}nap)")
-	print("Hátralévő körök száma:",info.sim_const["max_days"]//info.sim_const["days_per_round"]-info.sim_data["round"])
-	print(info.colors.HEADER,  "-"*26  ,info.colors.ENDC) #line
+menu_tree = {
+    "desc": "Sziti építő OS",
+    "actions": {
+        "start simulation": {"desc": "interaktív szimuláció elkezdődött",
+            "actions": {
+				"info": [events.show_info, "Szimulációs Információk"],
+				"jeln": [events.show_reports, "A jelenlegi kör jelentései [lakosok,panaszok,stb..] mutataja meg"],
+				"epit": [events.build, "Épület építése"],
+				"upgr": [events.upgrade_building, "Épület fejlesztése/felújjítása"],
+				#"next": [events.next_round, "Következő kör leszimulálása x db nap"],
+            }
+        },
+        "cvs adatok": {"desc": "CVS-file alapú, speciális épületek, városok importálása, exportálása",
+            "actions": {
+                "import_city": [log_export.import_city, "Importálja a város konfigurációt CVS-ből"],
+                "export_city": [log_export.export_city, "Exportálja a jelenlegi város konfigurációt CVS-be"],
+                "import_buildings": [log_export.import_buildings, "Importálja az épületeket CVS-ből"],
+                "export_buildings": [log_export.export_buildings, "Exportálja a jelenlegi épületeket CVS-be"]
+            }
+        },
+    }
+}
 
-def show_reports():
-	currency_type = info.sim_const["currency_type"]
-	print(info.colors.HEADER,  "-"*7,"jelentések","-"*7  ,info.colors.ENDC) #line
-	print("Valuta:",ui.format_number(info.sim_data["currency"]),currency_type)
-	print(f"Boldogság: {ui.format_number(info.sim_data["hapiness"])}%")
-	print("Épületek(db):",ui.format_number(len(info.sim_data["buildings"])),"db")
-	print("Polgárok(db):",ui.format_number(len(info.sim_data["citizens"])),"db")
-	print("Adó bevétel:"     )#WIP
-	print("Panaszok:"        )#WIP
-	print(info.colors.HEADER,  "-"*26  ,info.colors.ENDC) #line
+def open_menu(menu):
+    print(f"\n{info.Colors.OKGREEN}--{menu['desc']}--{info.Colors.ENDC}")
+    while True:
+        action_key = events.foolproof_input("Választás: ", menu["actions"])
+        if action_key is None: return
+        selected = menu["actions"][action_key]
+        if isinstance(selected, list):  # Submenu
+            selected[0]()
+        else:  # Execute action
+            open_menu(selected)
 
-def build():
-	new_building = ui.ui.foolproof_input("Mit akarsz építeni:",list(info.buildings.keys()))
-	if new_building:
-		new_building = info.buildings[new_building]
-		new_building.name = input("Épület neve: ") or info.buildings
-		info.sim_data["buildings"].update({len(info.sim_data["buildings"]): new_building})
-		print("added",new_building.type,new_building.name)
-
-def upgrade_building(): #NOT WORKING YET!!!!!
-	building_inp = ui.foolproof_input("Melyik épületet fejleszted (ID):",list(info.buildings.keys())) 
-	if not building_inp: return None
-	building = info.sim_data["buildings"].get(building_inp)
-	valid_upgs = building.get_valid_upgs()
-	if len(valid_upgs) > 0:
-		for e in valid_upgs: print(ui.colors.BOLD, "Megfizethető fejlesztések:",ui.colors.ENDC)
-		upg_inp = ui.foolproof_input("Melyik fejleszést szeretnéd alkalmazni?", valid_upgs)
-		if not upg_inp: return None
-		
-	else:
-		print("Nincsenek elérhető fejlesztések ehhez az épülethez.")
-		return None
-
-def disaster():
-	chances = [info.disaster.chance for info.disaster in info.disasters.values()]
-	dis = random.choices(list(info.disasters.keys()), weights=chances)[0]
-	if dis != "nincs katasztrófa":
-		print("szia")
-#end
 def checkEnd():
 	global simulating
 	if info.sim_data["hapiness"] < info.sim_const["min_hapiness"]: return True
-	elif info.sim_data["currency"] <= 0: return True
+	elif info.sim_data["currency_M"] <= 0: return True
 	return False
 
 def end_simulation():
-	print(f"{info.colors.FAIL}GAME OVER")
+	print(f"{info.info.Colors.FAIL}GAME OVER")
 
 if __name__ == "__main__": #akkor indul csak el a program, ha egyenesn ezt a python filet indítjuk el és nem indul el ha csak hivatkozunk rá
 	while not checkEnd():
-		ui.open_menu()
+		open_menu(menu_tree)

@@ -1,9 +1,4 @@
-import city_data as info, random
+test_dict = {"hamlet":False,"Rdova":23}
 
-def disaster():
-	chances = [info.disaster.chance for info.disaster in info.disasters.values()]
-	dis = random.choices(list(info.disasters.keys()), weights=chances)[0]
-	if dis != "nincs katasztrófa":
-		return dis
-
-print(disaster())
+for key, value in test_dict.items():
+    print(key,":",value)

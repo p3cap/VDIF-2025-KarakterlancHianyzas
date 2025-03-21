@@ -20,13 +20,24 @@ sim_data = {
 
 	"round": 0,
 }
+#others
+class Colors:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKCYAN = '\033[96m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+
 #feljegyzések
 logbook = []
 
 
 class Building: #épület azonosító, név, típus (pl. lakóház, iskola), építés éve, hasznos terület. 
 	building_types = ["lakóház","munkahely","egészségügy","iskola","közlekedés"]
-	def __init__(self, _cost_M:int, _area:int, _stories:int, _reliability:float, _type:str):
+	def __init__(self, _cost_M:int=0, _area:int=0, _stories:int=0, _reliability:float=0, _type:str=""):
 		self.built = None
 		self.cost = _cost_M
 		self.area = _area
@@ -48,6 +59,7 @@ class Building: #épület azonosító, név, típus (pl. lakóház, iskola), ép
 	def get_valid_upgs(self):
 		valid_upgrades = []
 		dict_building = vars(self)
+		print()
 		for key, upg in upgrades.items():
 			dict_upg = vars(upg)
 			if dict_upg[key] <= dict_building[key]:
