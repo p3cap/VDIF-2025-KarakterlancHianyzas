@@ -2,9 +2,9 @@ import datetime
 
 #simuláció konstansok
 sim_const = {
-"currency_type": "HUF",
+	"currency_type": "HUF",
 	"days_per_round": 30,
-	"min_hapiness": 50,
+	"min_hapiness": 20,
 	"max_hapiness": 100,
 	"illnes_rate": 0.1,
 	"max_days": 300
@@ -16,11 +16,13 @@ sim_data = {
 	"currency_M": 1000,
 	"buildings": {},
 	"citizens": {},
+	"projects": {},
 	"current_date": None,
 
 	"round": 0,
 }
 #others
+def func_check():pass #used for isinstance(object, type(func(check))) to differanciate func from varubles in classes, to make them easier to systemize
 class Colors:
     HEADER = '\033[95m'
     OKBLUE = '\033[94m'
@@ -31,41 +33,46 @@ class Colors:
     ENDC = '\033[0m'
     BOLD = '\033[1m'
 
-#feljegyzések
-logbook = []
+#classes
+class Project:
+	def __init__(self, _object, _cost_M:int=0 ,_finish_days:int=0):
+		self.finished = False
+		self.start_date = datetime.datetime.now()
+		self.cost_M = object.cost
+		self.object=_object
+		sim_data["projects"].update({len(sim_data["projects"]):self})
+	def is_done(self):
+		if self.start_date - datetime.datetime.now() <= 0:
+			self.finished = True
 
 
 class Building: #épület azonosító, név, típus (pl. lakóház, iskola), építés éve, hasznos terület. 
 	building_types = ["lakóház","munkahely","egészségügy","iskola","közlekedés"]
 	def __init__(self, _cost_M:int=0, _area:int=0, _stories:int=0, _reliability:float=0, _type:str=""):
-		self.built = None
+		self.built = datetime.datetime.now()
 		self.cost = _cost_M
 		self.area = _area
 		self.stories = _stories
 		self.reliability = _reliability
 		self.type = _type
-		self.age = 0
-		self.name = "N/A"
-		self.quality = 5.0
+		self.name = input("Épület neve: ") or "N/A"
+		self.quality = 2.5
 		self.upgrades = {}
-	def update(self):
-		self.age = self.built - None
-		for upg in self.upgrades:
-			upg.build_days = upg.started - 0 #timehere
+	def age(self): return (datetime.datetime.now() - self.built).days // 365
 	def upgrade(self,upg):
-		for key in self.upgrades:
-			if self.upgrades[key]["time_remains"] > 0: return "egszerre csak egy fejleszést lehet csinálni."
+		for key, value in upg.effects:
+			print(key, value)
+			getattr(self, key) += value
 
 	def get_valid_upgs(self):
 		valid_upgrades = []
-		dict_building = vars(self)
-		print()
 		for key, upg in upgrades.items():
-			dict_upg = vars(upg)
-			if dict_upg[key] <= dict_building[key]:
-				valid_upgrades.append(key)
-		return valid_upgrades
+			for key,req in upg.min_req:
+				value = getattr(self, key)
+				if isinstance(value,type(func_check)) and value() > req or value > req: #makes sure it's a function and then calls it with () to return value
+					valid_upgrades.append(upg)
 
+		return valid_upgrades
 
 class Upgrade:#szolgáltatás azonosító, név, típus (pl. egészségügy, közlekedés), kapcsolódó épület azonosítója. 
 #					^ will be in the buildigs upgarde list ^

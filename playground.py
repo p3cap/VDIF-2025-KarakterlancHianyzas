@@ -1,4 +1,7 @@
-test_dict = {"hamlet":False,"Rdova":23}
-
-for key, value in test_dict.items():
-    print(key,":",value)
+def funcion_checker(): pass
+class Ham:
+    igen = "nem"
+    def age():
+        return "ínah uh"
+    
+print(isinstance( getattr(Ham, "age") , type(funcion_checker)) )
