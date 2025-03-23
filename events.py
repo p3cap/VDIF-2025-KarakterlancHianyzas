@@ -7,7 +7,7 @@ def format_number(amount):
             return f"{amount:.2f}{unit}".rstrip('0').rstrip('.')
         amount /= 1000
 
-def number_input(prompt:str): #ERROR!! repeating
+def number_input(prompt:str):
 	inp = input ("[number] "+prompt)
 	while not inp.isnumeric(): inp = input ("[number] "+prompt)
 	return inp
@@ -89,7 +89,7 @@ def build():
 	if not new_building: return None
 	new_building = info.buildings[new_building]
 	info.Project(new_building)
-	print("No",new_building.type,new_building.name)
+	print("started project: ",new_building.name,new_building.type)
 
 def upgrade_building(): #NOT WORKING YET!!!!!
 	placed_builds = info.sim_data["buildings"]
@@ -116,7 +116,7 @@ def upgrade_building(): #NOT WORKING YET!!!!!
 		return None
 
 def custom_building():
-	info.buildings.update({ input("Épület neve: "): 
+	info.buildings.update({ len(info.sim_data["buildings"]): #id has to chnage, either name of buildding or rework searching method
 		info.Building(
 		_cost_M=number_input("Épület ára (Milliókba): "),
 		_area=number_input("Épület területe (m2-be): "),
