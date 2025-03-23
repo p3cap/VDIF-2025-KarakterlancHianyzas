@@ -11,10 +11,9 @@ def number_input(prompt:str): #ERROR!! repeating
 	inp = input ("[number] "+prompt)
 	while not inp.isnumeric(): inp = input ("[number] "+prompt)
 	return inp
-		
 
-def exxtra_input(prompt, choices, shortcuts={}):
-	if not shortcuts: shortcuts = {str(i): list(choices.items())[i][0] for i in range(len(list(choices.items()))) }
+def limited_input(prompt, choices):
+	shortcuts = {str(i): list(choices.items())[i][0] for i in range(len(list(choices.items()))) }
 	shortcut_ext=shortcuts.copy()  # Add help and exit shortcuts
 	shortcut_ext.update({"h": "help", "x": "exit"})
 	options = ', '.join([f"{act} [{shortcut}]" for shortcut, act in shortcut_ext.items()])
@@ -34,7 +33,35 @@ def exxtra_input(prompt, choices, shortcuts={}):
 		elif inp in shortcuts: return shortcuts[inp] #valid shortcut
 		else: print(f"{info.Colors.WARNING}Please choose one of the options{info.Colors.ENDC}")  # Invalid choice
 
-#választható dologok
+#forduló_szimulálása
+def next_round():
+  const = info.sim_const
+  data = info.sim_data
+  projects = info.sim_data["projects"]
+  buildings = info.sim_data["buildings"]
+  days = const["days_per_round"]
+  disaster = disaster()
+  
+  data["round"]+=1
+  
+  #aging
+  for Id, bld in buildings:
+    bld.age += days
+  
+  for Id, proj in projects:
+    if not proj.finished:
+      proj.check_done()
+  
+  if disaster:
+    pass
+  
+  #adó
+  for Id, citz in data["citizen"]:
+    pass
+  
+  
+
+#lekérdezések
 def show_info():
 	currency_type = info.sim_const["currency_type"]
 	print(info.Colors.HEADER,  "-"*10,"info","-"*10  ,info.Colors.ENDC) #line
@@ -55,9 +82,10 @@ def show_reports():
 	print("Panaszok:"        )#WIP
 	print(info.Colors.HEADER,  "-"*26  ,info.Colors.ENDC) #line
 
+
 #buildings
 def build():
-	new_building = exxtra_input("Mit akarsz építeni:",info.buildings)
+	new_building = limited_input("Mit akarsz építeni:",info.buildings)
 	if not new_building: return None
 	new_building = info.buildings[new_building]
 	info.Project(new_building)
@@ -74,15 +102,15 @@ def upgrade_building(): #NOT WORKING YET!!!!!
 	for Id, blding in placed_builds.items(): 
 		shortcuts.update( {blding.name: str(Id)} )#make id shortcuts
 
-	building_inp = exxtra_input("Melyik épületet fejleszted (ID):",build_choices,shortcuts)
+	building_inp = limited_input("Melyik épületet fejleszted:",build_choices)
 	if not building_inp: return None
-	print(building_inp)
 	building = placed_builds[building_inp]
 	valid_upgs = building.get_valid_upgs()
 	if len(valid_upgs) > 0:
-		for e in valid_upgs: print(info.Colors.BOLD, "Megfizethető fejlesztések:",info.Colors.ENDC)
-		upg_inp = exxtra_input("Melyik fejleszést szeretnéd alkalmazni?", valid_upgs)
+		upg_inp = limited_input("Megfizethető fejlesztések:", valid_upgs)
 		if not upg_inp: return None
+		new_upg = info.upgrades[upg_inp]
+		new_upg.finish_dict = building.upgrades #when finished goes into the builds upg dict
 	else:
 		print("Nincsenek elérhető fejlesztések ehhez az épülethez.")
 		return None
@@ -94,7 +122,7 @@ def custom_building():
 		_area=number_input("Épület területe (m2-be): "),
 		_stories=number_input("Emeletek száma: "),
 		_reliability=number_input("Megbízhatósági érték (0-100): "),
-		_type=exxtra_input("Épület fajtája: ", {e:[None,"Épület típus"] for e in info.Building.building_types}) or info.Building.building_types[0]
+		_type=limited_input("Épület fajtája: ", {e:[None,"Épület típus"] for e in info.Building.building_types}) or info.Building.building_types[0]
 	)})
 
 #random events handling

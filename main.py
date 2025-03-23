@@ -8,13 +8,14 @@ menu_tree = {
 			"actions": {
 				"epit": [events.build, "Épület építése"],
 				"upgr": [events.upgrade_building, "Épület fejlesztése/felújjítása"],
-				"stat": {"desc": "Statosztika kimutatás",
+				"next_round": [events.next_round, f"Következő kör ({info.sim_const['days_per_round']} nap) le szimulálása."],
+				"stat": {"desc": "Statisztika kimutatási opciók",
 						"actions": {
 							"info": [events.show_info, "Szimulációs Információk"],
 							"jeln": [events.show_reports, "A jelenlegi kör jelentései [lakosok,panaszok,stb..] mutataja meg"],
-                            "list_citizens": [events.show_reports, "Összes lakos statisztikáit"],
-                            "list_buildings": [events.show_reports, "Összes épület statisztikáit"],
-                            "list_history": [events.show_reports, "Összes épület statisztikáit"],
+							"list_citizens": [events.show_reports, "Összes lakos statisztikáit"],
+							"list_buildings": [events.show_reports, "Összes épület statisztikáit"],
+							"list_history": [events.show_reports, "Összes épület statisztikáit"],
 						}
 					}
 				#"next": [events.next_round, "Következő kör leszimulálása x db nap"],
@@ -35,7 +36,7 @@ menu_tree = {
 def open_menu(menu):
     print(f"\n{info.Colors.OKGREEN}--{menu['desc']}--{info.Colors.ENDC}")
     while True:
-        action_key = events.exxtra_input("Választás: ", menu["actions"])
+        action_key = events.limited_input("Választás: ", menu["actions"])
         if action_key is None: return
         selected = menu["actions"][action_key]
         if isinstance(selected, list):  # Submenu
