@@ -13,7 +13,7 @@ def number_input(prompt:str):
 	return inp
 
 def choice_input(prompt:str, choices:dict): #dict: "choice name": {"return_value":, "desc":}
-	shortcuts = {str(i): list(choices.items())[i][0] for i in range(len(list(choices.items()))) }
+	shortcuts = {str(i): key for i, key in enumerate(choices)}
 	shortcut_ext=shortcuts.copy()
 	shortcut_ext.update({"h": "help", "x": "exit"})
 	options = ', '.join([f"{act} [{shortcut}]" for shortcut, act in shortcut_ext.items()])
@@ -27,8 +27,8 @@ def choice_input(prompt:str, choices:dict): #dict: "choice name": {"return_value
 			for shortcut, act in shortcuts.items():
 				print(f"{act} [{shortcut}]: {choices[act]["desc"]}")
 		
-		elif inp in choices: return choices[inp]["return_value"] #valid
-		elif inp in shortcuts: return choices[shortcuts[inp]]["return_value"] #valid shortcut
+		elif inp in choices: return choices[inp] #valid
+		elif inp in shortcuts: return choices[shortcuts[inp]] #valid shortcut
 		else: print(f"{info.Colors.WARNING}Invalid opció{info.Colors.ENDC}")
 
 #lekérdezések
@@ -67,7 +67,7 @@ def list_projects():
 #buildings
 def build():
 	buildings_choices = {bld.name: {"return_value":bld, "desc":f"Tipus: {bld.type}, Minőség: {bld.quality}"} for bld in info.buildings}
-	new_building = choice_input("Mit akarsz építeni:",buildings_choices)
+	new_building = choice_input("Mit akarsz építeni:",buildings_choices)["return_value"]
 	if not new_building: return None
 	info.Project(new_building)
 	print(f"Új projekt: {new_building.name,new_building.type}","Befejezési idő: {new_building.finish_days} nap",sep="\n")
@@ -82,12 +82,12 @@ def upgrade_building():
 	for Id, blding in placed_builds.items(): 
 		shortcuts.update( {blding.name: str(Id)} )#make id shortcuts
 
-	building_inp = choice_input("Melyik épületet fejleszted:",build_choices)
+	building_inp = choice_input("Melyik épületet fejleszted:",build_choices)["return_value"]
 	if not building_inp: return None
 	building = placed_builds[building_inp]
 	valid_upgs = {upg.name: {"return_value": upg.name, "desc":f"Ár: {upg.cost_M}, Hatások: {upg.effects}, Projekt idő: {upg.build_days} nap"} for upg in building.get_valid_upgs()}
 	if len(valid_upgs) > 0:
-		upg_inp = choice_input("Megfizethető fejlesztések:", valid_upgs)
+		upg_inp = choice_input("Megfizethető fejlesztések:", valid_upgs)["return_value"]
 		if not upg_inp: return None
 		new_upg = info.upgrades[upg_inp]
 		new_upg.finish_dict = building.upgrades #when finished goes into the builds upg dict
@@ -101,7 +101,7 @@ def custom_building():
 		_area=number_input("Épület területe (m2-be): "),
 		_stories=number_input("Emeletek száma: "),
 		_reliability=number_input("Megbízhatósági érték (0-100): "),
-		_type=choice_input("Épület fajtája: ", {e:{"return_value":e,"desc":"Épület típus"} for e in info.Building.building_types}) or info.Building.building_types[0]
+		_type=choice_input("Épület fajtája: ", {e:{"return_value":e,"desc":"Épület típus"} for e in info.Building.building_types})["return_value"] or info.Building.building_types[0]
 	))
 
 #random events handling
