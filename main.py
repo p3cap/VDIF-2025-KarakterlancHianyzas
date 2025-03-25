@@ -1,48 +1,45 @@
 import random, os, datetime, events, log_export
 import city_data as info
 
-menu_tree = {
+#megjegyzés: a city maga lehetett volna egy külön class... but no time to doit now
+
+menu_tree = { #return_value -> actions volt, a choice_input egyszerűségének érdekében lett megváltoztatva
 	"desc": "Sziti építő OS",
-	"actions": {
+	"return_value": {
 		"start simulation": {"desc": "interaktív szimuláció elkezdődött",
-			"actions": {
-				"epit": [events.build, "Épület építése"],
-				"upgr": [events.upgrade_building, "Épület fejlesztése/felújjítása"],
-				"next_round": [events.next_round, f"Következő kör ({info.sim_const['days_per_round']} nap) le szimulálása."],
+			"return_value": {
+				"epit": {"return_value":events.build, "desc":"Épület építése"},
+				"upgr": {"return_value":events.upgrade_building, "desc":"Épület fejlesztése/felújjítása"},
+				"next_round": {"return_value":events.next_round, "desc":f"Következő kör (választott mennyiségű nap) le szimulálása."},
 				"stat": {"desc": "Statisztika kimutatási opciók",
-						"actions": {
-							"info": [events.show_info, "Szimulációs Információk"],
-							"jeln": [events.show_reports, "A jelenlegi kör jelentései [lakosok,panaszok,stb..] mutataja meg"],
-							"list_citizens": [events.show_reports, "Összes lakos statisztikáit"],
-							"list_buildings": [events.show_reports, "Összes épület statisztikáit"],
-							"list_history": [events.show_reports, "Összes épület statisztikáit"],
+						"return_value": {
+							"info": {"return_value":events.show_info, "desc":"Szimulációs Információk"},
+							"jelentés": {"return_value":events.show_reports, "desc":"A jelenlegi kör jelentései [lakosok,pénz,stb..] mutataja meg"},
+							"list projects": {"return_value":events.list_projects, "desc":"Összes projekt statisztikáit mutatja ki"},
+							"list citizens": {"return_value":events.list_citizens, "desc":"Összes lakos statisztikáit mutatja ki"},
+							"list buildings": {"return_value":events.list_buildings, "desc":"Összes épület statisztikáit mutatja ki"},
 						}
 					}
-				#"next": [events.next_round, "Következő kör leszimulálása x db nap"],
 			}
 		},
 		"cvs adatok": {"desc": "CVS-file alapú, speciális épületek, városok importálása, exportálása",
-			"actions": {
-				"city_import": [log_export.import_city, "Importálja a város konfigurációt CVS-ből"],
-				"export_city": [log_export.export_city, "Exportálja a jelenlegi város konfigurációt CVS-be"],
-				"import_buildings": [log_export.import_buildings, "Importálja az épületeket CVS-ből"],
-				"building_export": [log_export.export_buildings, "Exportálja a jelenlegi épületeket CVS-be"],
-				"make_custom_building": [events.custom_building, "Saját típusú épület létrehozása"],
+			"return_value": {
+				"city_import": {"return_value":log_export.import_city, "desc":"Importálja a város konfigurációt CVS-ből"},
+				"export_city": {"return_value":log_export.export_city, "desc":"Exportálja a jelenlegi város konfigurációt CVS-be"},
+				"import_buildings": {"return_value":log_export.import_buildings, "desc":"Importálja az épületeket CVS-ből"},
+				"building_export": {"return_value":log_export.export_buildings, "desc":"Exportálja a jelenlegi épületeket CVS-be"},
+				"make_custom_building": {"return_value":events.custom_building, "desc":"Saját típusú épület létrehozása"},
 			}
 		},
 	}
 }
 
 def open_menu(menu):
-    print(f"\n{info.Colors.OKGREEN}--{menu['desc']}--{info.Colors.ENDC}")
-    while True:
-        action_key = events.limited_input("Választás: ", menu["actions"])
-        if action_key is None: return
-        selected = menu["actions"][action_key]
-        if isinstance(selected, list):  # Submenu
-            selected[0]()
-        else:  # Execute action
-            open_menu(selected)
+	print(f"\n{info.Colors.OKGREEN}--{menu['desc']}--{info.Colors.ENDC}")
+	choice = events.choice_input("Választás: ", menu)
+	if not choice: return None
+	if isinstance(choice, dict): open_menu(choice) #submenu
+	else: choice() #func
 
 def checkEnd():
 	global simulating
@@ -53,6 +50,7 @@ def checkEnd():
 def end_simulation():
 	print(f"{info.info.Colors.FAIL}GAME OVER")
 
-if __name__ == "__main__": #akkor indul csak el a program, ha egyenesn ezt a python filet indítjuk el és nem indul el ha csak hivatkozunk rá
+if __name__ == "__main__": #akkor indul csak el a program, ha egyenesn ezt a python filet indítjuk el és nem indul el ha hivatkozunk rá
 	while not checkEnd():
-		open_menu(menu_tree)
+		open_menu(menu_tree["return_value"])
+	end_simulation()

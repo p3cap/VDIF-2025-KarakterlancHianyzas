@@ -1,13 +1,21 @@
-import datetime
+import datetime, random as rng
 
 #simuláció konstansok
-sim_const = {
+sim_const = { #area calcuated in m2
 	"currency_type": "HUF",
-	"days_per_round": 30,
+	"area_for_citizen": 30,
 	"min_hapiness": 20,
 	"max_hapiness": 100,
-	"illnes_rate": 0.1,
-	"max_days": 300
+	"max_rounds": 300,
+	"tax_per_citizen": 50000,
+	"area_per_service": 5, #mekkore terület után számít fel szolgáltatást egy meberre
+	"serice_requirements": { #%of pupultion, these will accumlate happiness
+		"egészségügy": 0.1,#10%
+		"munkahely": 0.9,
+		"oktatás": 0.25,
+		"közlekedés": 0.8,
+		"rendőrség": 0.4,
+	}
 }
 
 #simuláció adatai
@@ -17,18 +25,15 @@ sim_data = {
 	"buildings": {},
 	"citizens": {},
 	"projects": {},
-	"current_date": None,
-
-	"round": 0,
+	"start_year": 2025,
+	"day": 0,
 }
 #others
-def func_check():pass #used for isinstance(object, type(func(check))) to differanciate func from varubles in classes, to make them easier to systemize
 class Colors:
     HEADER = '\033[95m'
     OKBLUE = '\033[94m'
     OKCYAN = '\033[96m'
     OKGREEN = '\033[92m'
-    WARNING = '\033[93m'
     FAIL = '\033[91m'
     ENDC = '\033[0m'
     BOLD = '\033[1m'
@@ -45,9 +50,8 @@ class Project:
 			self.finished = True
 			self.finish_dict.update({len(self.finish_dict)})
 
-
 class Building(Project): #épület azonosító, név, típus (pl. lakóház, iskola), építés éve, hasznos terület. 
-	building_types = ["lakóház","munkahely","egészségügy","iskola","közlekedés"]
+	building_types = ["lakóház","munkahely","egészségügy","oktatás","közlekedés","rendőrség"]
 	def __init__(self, _cost_M:int=0, _area:int=0, _stories:int=0, _reliability:int=0, _finish_days:int=0,_type:str="",_name:str=""):
 		self.built = datetime.datetime.now()
 		self.cost = _cost_M
@@ -66,20 +70,23 @@ class Building(Project): #épület azonosító, név, típus (pl. lakóház, isk
 		for key, value in upg.effects:
 			print(key, value)
 			setattr(self, key, getattr(self, key) + value)
+	def update(self):
+		self.age = datetime.datetime().now() - self.built
 
 	def get_valid_upgs(self):
 		valid_upgrades = []
 		for key, upg in upgrades.items():
 			for key,req in upg.min_req:
 				value = getattr(self, key)
-				if isinstance(value,type(func_check)) and value() > req or value > req: #makes sure it's a function and then calls it with () to return value
+				if value > req: #makes sure it's a function and then calls it with () to return value
 					valid_upgrades.append(upg)
 
 		return valid_upgrades
 
 class Upgrade(Project):#szolgáltatás azonosító, név, típus (pl. egészségügy, közlekedés), kapcsolódó épület azonosítója. 
 #					^ will be in the buildigs upgarde list ^
-	def __init__(self, _cost_M:int, _finish_days:int, _per_100:bool, _min_requirements:dict, _effects:dict):
+	def __init__(self, _name, _cost_M:int, _finish_days:int, _per_100:bool, _min_requirements:dict, _effects:dict):
+		self.name = _name
 		self.cost = _cost_M
 		self._finish_days = _finish_days
 		self.per_100 = _per_100
@@ -88,14 +95,28 @@ class Upgrade(Project):#szolgáltatás azonosító, név, típus (pl. egészség
 		self.started = 0
 		self.finish_dict = None #in this case the builduings upgrade dict
 
-
-
 class Disaster:
-	def __init__(self, _hapiness_decrease:int=0, _per_100:bool=False, _stranght:dict=1, _chance:float=0):
-		self.per_100 = _per_100
-		self.stranght = _stranght
-		self.hapiness_decrease = _hapiness_decrease
+	def __init__(self, _name, _strength:dict=0, _chance:float=0):
+		self.name = _name
+		self.strength = _strength
 		self.chance = _chance
+	def activate_disaster(self):
+		dis_info = {
+			"size": rng.randint(1,5),
+			"damaged_builds": [],
+			"repair_cost_M": 0 
+		}
+		buildings = sim_data["buildings"]
+		min_affected = max(1, len(buildings) // 10) #chooses random builds
+		max_affected = min(len(buildings) // 2, rng.randint(self.min_max[0], self.min_max[1])) #chooses random builds
+		for building in rng.sample(buildings, rng.randint(min_affected, max_affected)): #chooses random builds
+			if building._type in self.strength:
+				new_quality = max(0, building.quality - self.strength[building._type])
+				dis_info["damaged_builds"].append(building.name)
+				dis_info["repair_cost_M"] += (building.quality - new_quality) * 0.05 * building.cost_M #repair
+				setattr(self, "quality" + new_quality)
+
+		return dis_info
 
 class Citizen: #lakos azonosító, név, születési év, foglalkozás, lakóhely (kapcsolat az Épületek táblával). 
 	def __init__(self, _ID:int, _born:int, _job:str, _houseID:int):
@@ -104,30 +125,63 @@ class Citizen: #lakos azonosító, név, születési év, foglalkozás, lakóhel
 		self.job = _job
 		self.houseID = _houseID
 
-buildings = { #_cost_M(millikba):int, _area(m2):int, _stories:int, _reliability(megbizhatóság), _type:str
-	"ház": Building(_cost_M=60, _area=150, _stories=1, _reliability=98, _type="lakossági", _name="ház"),
-	"ikerház": Building(_cost_M=75, _area=300, _stories=1, _reliability=98, _type="lakossági", _name="ikerház"),
-	"lakótelep": Building(_cost_M=900, _area=60000, _stories=10, _reliability=89, _type="lakossági", _name="lakótelep"),
+buildings = [
+	# Lakó
+	Building(_name="családi ház", _cost_M=60, _area=150, _stories=1, _reliability=98, _type="lakóház"),
+	Building(_name="ikerház", _cost_M=75, _area=300, _stories=2, _reliability=98, _type="lakóház"),
+	Building(_name="társasház", _cost_M=250, _area=1000, _stories=4, _reliability=95, _type="lakóház"),
+	Building(_name="lakótelepi épület", _cost_M=900, _area=6000, _stories=10, _reliability=89, _type="lakóház"),
+	
+	# Egészség
+	Building(_name="mini rendelő", _cost_M=90, _area=100, _stories=1, _reliability=92, _type="egészség"),
+	Building(_name="szakorvosi rendelő", _cost_M=600, _area=1200, _stories=2, _reliability=90, _type="egészség"),
+	Building(_name="kórház", _cost_M=2800, _area=5000, _stories=4, _reliability=90, _type="egészség"),
+	Building(_name="klinikai központ", _cost_M=6000, _area=10000, _stories=6, _reliability=88, _type="egészség"),
 
-	"mini rendelő": Building(_cost_M=90, _area=100, _stories=1, _reliability=92, _type="egészségügy", _name="mini rendelő"),
-	"kórház": Building(_cost_M=2800, _area=5000, _stories=4, _reliability=89.9, _type="egészségügy", _name="kórház"),
+	# Oktatás
+	Building(_name="óvoda", _cost_M=325, _area=500, _stories=2, _reliability=93, _type="oktatás"),
+	Building(_name="általános iskola", _cost_M=1200, _area=3000, _stories=3, _reliability=94, _type="oktatás"),
+	Building(_name="középiskola", _cost_M=2000, _area=4000, _stories=4, _reliability=95, _type="oktatás"),
+	Building(_name="egyetem", _cost_M=3000, _area=5500, _stories=4, _reliability=95, _type="oktatás"),
 
-	"óvoda": Building(_cost_M=325, _area=500, _stories=2, _reliability=93, _type="iskola", _name="óvoda"),
-	"egyetem": Building(_cost_M=3000, _area=5500, _stories=4, _reliability=95, _type="iskola", _name="egyetem"),
-}
+	# Munka
+	Building(_name="kisbolt", _cost_M=250, _area=300, _stories=1, _reliability=97, _type="munka"),
+	Building(_name="irodaház", _cost_M=1500, _area=10000, _stories=5, _reliability=95, _type="munka"),
+	Building(_name="bevásárlóközpont", _cost_M=5000, _area=20000, _stories=3, _reliability=90, _type="munka"),
+	Building(_name="ipari park", _cost_M=10000, _area=50000, _stories=2, _reliability=85, _type="munka"),
 
-upgrades = {#_cost_M(millio), _finish_days(napban), _per_100(méretarányos), _effects(hatásai)
-	"energetikai korszerűsítés": Upgrade(_cost_M=3, _finish_days=150, _per_100=True, _min_requirements={"age":5}, _effects={"quality": 3, "reliability": 20}),
-	"bővítés": Upgrade(_cost_M=3, _finish_days=30, _per_100=True, _min_requirements={}, _effects={"space": 30}),
-	"szigetelés": Upgrade(_cost_M=3, _finish_days=30, _per_100=True, _min_requirements={}, _effects={"quality": 2.5}),
-	"tetőcsere": Upgrade(_cost_M=3, _finish_days=30, _per_100=True, _min_requirements={}, _effects={"reliability": 30}),
-	"lift beépítés": Upgrade(_cost_M=5, _finish_days=60, _per_100=False, _min_requirements={"stories":2}, _effects={"quality": 2.5})
-}
-disasters = {# _stranght(a katasztrófa mértéke), _hapiness_decrease(boldogság csökkenése), _chance(esély a bekövetkezésre)
-	"cunami": Disaster( _stranght=4, _hapiness_decrease=28, _chance=0.22),
-	"tornádó": Disaster( _stranght=3, _hapiness_decrease=30, _chance=0.33),
-	"tűz": Disaster( _stranght=2, _hapiness_decrease=10,_chance=0.20),
-	"bombázás": Disaster( _stranght=4, _hapiness_decrease=35, _chance=0.41),
-	"vulkán": Disaster( _stranght=5, _hapiness_decrease=25, _chance=0.09),
-	"nincs katasztrófa": Disaster(_chance=2)
-	}
+	# Közlekedés
+	Building(_name="autóbusz megálló", _cost_M=50, _area=50, _stories=1, _reliability=99, _type="közlekedés"),
+	Building(_name="buszpályaudvar", _cost_M=800, _area=3000, _stories=1, _reliability=85, _type="közlekedés"),
+	Building(_name="vasútállomás", _cost_M=1200, _area=5000, _stories=2, _reliability=88, _type="közlekedés"),
+	Building(_name="repülőtér", _cost_M=20000, _area=100000, _stories=3, _reliability=80, _type="közlekedés")
+]
+
+upgrades = [
+	Upgrade(_name="energetikai korszerűsítés", _cost_M=0.3, _finish_days=150, _per_100=True, _min_requirements={"age": 5}, _effects={"quality": 3, "reliability": 20}),
+	Upgrade(_name="bővítés", _cost_M=0.3, _finish_days=30, _per_100=True, _min_requirements={"area": 200}, _effects={"space": 30}),
+	Upgrade(_name="szigetelés", _cost_M=0.3, _finish_days=30, _per_100=True, _min_requirements={"age": 3}, _effects={"quality": 2.5}),
+	Upgrade(_name="tetőcsere", _cost_M=0.3, _finish_days=30, _per_100=True, _min_requirements={"age": 10}, _effects={"reliability": 30}),
+	Upgrade(_name="lift beépítés", _cost_M=5, _finish_days=60, _per_100=False, _min_requirements={"stories": 3}, _effects={"quality": 2.5}),
+	Upgrade(_name="napkollektor telepítés", _cost_M=0.5, _finish_days=45, _per_100=False, _min_requirements={"stories": 1}, _effects={"quality": 4, "reliability": 10}),
+	Upgrade(_name="okosotthon rendszer", _cost_M=0.7, _finish_days=60, _per_100=False, _min_requirements={"type": "lakó"}, _effects={"quality": 5, "reliability": 5}),
+	
+	Upgrade(_name="hőszivattyú", _cost_M=1, _finish_days=45, _per_100=False, _min_requirements={"type": "lakó", "age": 2}, _effects={"quality": 3, "reliability": 5}),
+	Upgrade(_name="biztonsági rendszer", _cost_M=0.6, _finish_days=30, _per_100=False, _min_requirements={"type": "munka"}, _effects={"reliability": 10}),
+	Upgrade(_name="térfigyelő kamerák", _cost_M=0.4, _finish_days=25, _per_100=False, _min_requirements={"type": "közlekedés"}, _effects={"reliability": 7}),
+	Upgrade(_name="környezetbarát burkolatok", _cost_M=0.3, _finish_days=20, _per_100=True, _min_requirements={"area": 500}, _effects={"quality": 2}),
+	Upgrade(_name="zöldtető", _cost_M=1.5, _finish_days=90, _per_100=False, _min_requirements={"stories": 2, "age": 5}, _effects={"quality": 5, "reliability": 3}),
+	Upgrade(_name="elektromos töltőállomás", _cost_M=2, _finish_days=60, _per_100=False, _min_requirements={"type": "munka"}, _effects={"quality": 4}),
+	Upgrade(_name="intelligens világítás", _cost_M=0.5, _finish_days=40, _per_100=False, _min_requirements={"age": 3}, _effects={"quality": 3, "reliability": 2}),
+	Upgrade(_name="modern csatornarendszer", _cost_M=1, _finish_days=60, _per_100=True, _min_requirements={"age": 10, "area": 1000}, _effects={"reliability": 8}),
+	Upgrade(_name="hangszigetelés", _cost_M=0.8, _finish_days=50, _per_100=True, _min_requirements={"type": "lakó", "age": 3}, _effects={"quality": 3}),
+	Upgrade(_name="faültetés", _cost_M=0.2, _finish_days=10, _per_100=True, _min_requirements={"area": 200}, _effects={"quality": 1})
+]
+disasters = [
+	Disaster(_name="cunami", _strength=4, _chance=0.22),
+	Disaster(_name="tornádó", _strength=3, _chance=0.33),
+	Disaster(_name="tűz", _strength=2, _chance=0.20),
+	Disaster(_name="bombázás", _strength=4, _chance=0.41),
+	Disaster(_name="vulkán", _strength=5, _chance=0.09),
+	Disaster(_name="nincs katasztrófa", _strength=0, _chance=2)
+]
