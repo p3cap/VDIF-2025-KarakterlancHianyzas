@@ -5,8 +5,8 @@ sim_const = { #area calcuated in m2
 	"currency_type": "HUF",
 	"area_for_citizen": 30,
 	"citizen_age_skpektrum": (0,80),
-	"min_hapiness": 50,
-	"max_hapiness": 100,
+	"min_happiness": 20,
+	"max_happiness": 100,
 	"max_days": 30000,
 	"tax_per_citizen": 50000,
 	"area_per_service": 5, #mekkore terület után számít fel szolgáltatást egy meberre
@@ -21,11 +21,12 @@ sim_const = { #area calcuated in m2
 
 #simuláció adatai
 sim_data = {
-	"hapiness": 100,
+	"happiness": 30,
 	"currency_M": 1000,
 	"buildings": {},
 	"citizens": {},
 	"projects": {},
+	"complaints": {},
 	"start_year": 2025,
 	"day": 0,
 }
@@ -46,13 +47,12 @@ class Project:
 	def __init__(self):
 		self.finished = False
 		self.start_date = sim_data["day"]
+		self.finish_days = 100
 	def check_done(self):
-		if self.start_date - sim_data["day"] <= 0:
+		if sim_data["day"] - self.start_date  >= self.finish_days:
 			self.finished = True
 			print(self.finish_dict)
 			self.finish_dict.update({len(sim_data["buildings"]):self})
-	def __format__(self, format_spec):
-		return f"Projekt"
 
 class Building(Project): #épület azonosító, név, típus (pl. lakóház, iskola), építés éve, hasznos terület. 
 	building_types = ["lakóház","munkahely","kórház","iskola","rendőrség","bolt"]
@@ -89,7 +89,7 @@ class Building(Project): #épület azonosító, név, típus (pl. lakóház, isk
 
 		return valid_upgrades
 	def __format__(self, format_spec):
-		return f"Projekt"
+		return f"{self.name:<10}{self.type:<10}{self.services}"
 
 class Upgrade(Project):#szolgáltatás azonosító, név, típus (pl. egészségügy, közlekedés), kapcsolódó épület azonosítója. 
 #					^ will be in the buildigs upgarde list ^
@@ -104,7 +104,7 @@ class Upgrade(Project):#szolgáltatás azonosító, név, típus (pl. egészség
 		self.started = 0
 		self.finish_dict = None #in this case the builduings upgrade dict
 	def __format__(self, format_spec):
-		return f"Projekt"
+		return f"upg"
 
 class Disaster:
 	def __init__(self, _name, _strength: dict = 0, _chance: float = 0):
@@ -137,17 +137,16 @@ class Disaster:
 		return dis_info
 
 	def __format__(self, format_spec):
-		return f"Projekt"
+		return f"Disatser"
 
 class Citizen: #lakos azonosító, név, születési év, foglalkozás, lakóhely (kapcsolat az Épületek táblával). 
-	def __init__(self, _ID:int, _born:int, _job:str, _houseID:int):
+	def __init__(self, _born:int, _job:str, _houseID:int):
 		super().__init__()
-		self.ID = _ID
 		self.born = _born
 		self.job = _job
 		self.houseID = _houseID
 	def __format__(self, format_spec):
-		return f"Projekt"
+		return f"{self.born:<10}{self.job:<10}{self.houseID:<10}"
 
 def make_id(data_dict):
 	if not data_dict:return 1

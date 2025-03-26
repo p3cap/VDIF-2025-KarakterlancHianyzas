@@ -47,7 +47,7 @@ def open_menu(menu, desc=""):
 			choice()  # call the return value func
 
 def checkEnd():
-	if info.sim_data["hapiness"] < info.sim_const["min_hapiness"]: 
+	if info.sim_data["happiness"] < info.sim_const["min_happiness"]: 
 		return True
 	elif info.sim_data["currency_M"] <= 0: 
 		return True
