@@ -5,7 +5,7 @@ sim_const = { #area calcuated in m2
 	"currency_type": "HUF",
 	"area_for_citizen": 30,
 	"citizen_age_skpektrum": (0,80),
-	"min_hapiness": 20,
+	"min_hapiness": 50,
 	"max_hapiness": 100,
 	"max_days": 30000,
 	"tax_per_citizen": 50000,
@@ -21,7 +21,7 @@ sim_const = { #area calcuated in m2
 
 #simuláció adatai
 sim_data = {
-	"hapiness": sim_const["min_hapiness"],
+	"hapiness": 100,
 	"currency_M": 1000,
 	"buildings": {},
 	"citizens": {},
@@ -56,7 +56,7 @@ class Project:
 
 class Building(Project): #épület azonosító, név, típus (pl. lakóház, iskola), építés éve, hasznos terület. 
 	building_types = ["lakóház","munkahely","kórház","iskola","rendőrség","bolt"]
-	def __init__(self, _cost_M:int=0, _area:int=0, _stories:int=0, _reliability:int=0, _finish_days:int=0,_type:list=[],_name:str=""):
+	def __init__(self, _cost_M:int=0, _area:int=0, _stories:int=0, _reliability:int=0, _finish_days:int=0,_type="lakóház",_services:list=[],_name:str=""):
 		super().__init__()
 		self.built = sim_data["day"]
 		self.cost = _cost_M
@@ -65,6 +65,7 @@ class Building(Project): #épület azonosító, név, típus (pl. lakóház, isk
 		self.reliability = _reliability
 		self.finish_days = _finish_days
 		self.type = _type
+		self.services = _services
 		self.name = _name or input("Épület neve: ") or "N/A"
 		self.quality = 2.5
 		self.upgrades = {}
@@ -83,7 +84,7 @@ class Building(Project): #épület azonosító, név, típus (pl. lakóház, isk
 		for key, upg in upgrades.items():
 			for key,req in upg.min_req:
 				value = getattr(self, key)
-				if value > req: #makes sure it's a function and then calls it with () to return value
+				if value > req:
 					valid_upgrades.append(upg)
 
 		return valid_upgrades
@@ -106,28 +107,35 @@ class Upgrade(Project):#szolgáltatás azonosító, név, típus (pl. egészség
 		return f"Projekt"
 
 class Disaster:
-	def __init__(self, _name, _strength:dict=0, _chance:float=0):
+	def __init__(self, _name, _strength: dict = 0, _chance: float = 0):
 		super().__init__()
 		self.name = _name
 		self.strength = _strength
 		self.chance = _chance
+
 	def activate_disaster(self):
 		dis_info = {
-			"size": rng.randint(1,5),
+			"size": rng.randint(1, 5),
 			"damaged_builds": [],
-			"repair_cost_M": 0 
+			"repair_cost_M": 0
 		}
-		buildings = sim_data["buildings"]
-		min_affected = max(1, len(buildings) // 10) #chooses random builds
-		max_affected = min(len(buildings) // 2, rng.randint(self.min_max[0], self.min_max[1])) #chooses random builds
-		for building in rng.sample(buildings, rng.randint(min_affected, max_affected)): #chooses random builds
-			if building._type in self.strength:
-				new_quality = max(0, building.quality - self.strength[building._type])
+		buildings = list(sim_data["buildings"].values())  # Convert dictionary values to a list
+		if not buildings:
+			return dis_info  # Return early if there are no buildings
+
+		min_affected = max(1, len(buildings) // 10)
+		max_affected = min(len(buildings), rng.randint(min_affected, len(buildings)))
+
+		for building in rng.sample(buildings, rng.randint(min_affected, max_affected)):
+			if building.type in self.strength:
+				damage = self.strength[building.type]
+				new_quality = max(0, building.quality - damage)
 				dis_info["damaged_builds"].append(building.name)
-				dis_info["repair_cost_M"] += (building.quality - new_quality) * 0.05 * building.cost_M #repair
-				setattr(self, "quality" + new_quality)
+				dis_info["repair_cost_M"] += (building.quality - new_quality) * 0.05 * building.cost
+				building.quality = new_quality  # Correctly update the building's quality
 
 		return dis_info
+
 	def __format__(self, format_spec):
 		return f"Projekt"
 
@@ -140,6 +148,11 @@ class Citizen: #lakos azonosító, név, születési év, foglalkozás, lakóhel
 		self.houseID = _houseID
 	def __format__(self, format_spec):
 		return f"Projekt"
+
+def make_id(data_dict):
+	if not data_dict:return 1
+	return max(data_dict.keys()) + 1
+
 
 buildings = [
 	# Lakó

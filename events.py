@@ -1,11 +1,16 @@
 import city_data as info, random as rng
 
-#others
+#input, formatting
 def format_number(amount):
-    for unit in ["", "k", "M", "B", "T", "P", "E", "Z"]:
+    for unit in ["M", "B", "T", "P", "E", "Z"]:
         if abs(amount) < 1000:
             return f"{amount:.2f}{unit}".rstrip("0").rstrip(".")
         amount /= 1000
+
+def format_date(days):
+	year = info.sim_data["start_year"] + (days // 365)
+	day_of_year = days % 365
+	return f"{year} - Day {day_of_year}"
 
 def number_input(prompt:str):
 	inp = input ("[number] "+prompt)
@@ -36,7 +41,6 @@ def show_info():
 	currency_type = info.sim_const["currency_type"]
 	print(info.Colors.HEADER, "-" * 15, "INFO", "-" * 15, info.Colors.ENDC)  
 	print(f"{"Maximum nap:":<30} {info.sim_const["max_days"]}")
-	print(f"{"Egy körben eltelő napok száma:":<30} {info.sim_const["days_per_round"]}")
 	print(f"{"Eltelt körök száma:":<30} {info.sim_data["day"]}")
 	print(f"{"Max napok:":<30} {info.sim_data["day"]}")
 	print(info.Colors.HEADER, "-" * 40, info.Colors.ENDC)  
@@ -53,34 +57,31 @@ def show_reports():
 
 
 def list_citizens():
-	print(f"{"ID":<5} {"Born":<6} {"Job":<20} {"HouseID":<8} \n{"-" * 45}")
+	print(f"{"ID":<10} {"Born":<10} {"Job":<10} {"HouseID":<10} \n{"-" * 45}")
 	for key,c in info.sim_data["citizens"].items(): print(f"{c.ID:<5} {c.born:<6} {c.job:<20} {c.houseID:<8}")
 def list_buildings():
-	print(f"{"ID":<5} {"Born":<6} {"Job":<20} {"HouseID":<8} \n{"-" * 45}")
+	print(f"{"ID":<10} {"Born":<10} {"Job":<10} {"HouseID":<10} \n{"-" * 45}")
 	for key,c in info.sim_data["buildings"].items(): print(f"{c.ID:<5} {c.born:<6} {c.job:<20} {c.houseID:<8}")
 def list_projects():
 	print(info.sim_data["projects"])
-	print(f"{"ID":<5} {"Start day":<6} {"Time reamins":<20} {"building ID":<8} \n{"-" * 45}")
-	for key,p in info.sim_data["projects"].items(): 
-		print(f"{key:<5} {p.start_date:<6} {(info.sim_data["day"]-p.finish_days):<20} {"unassigned":<8}")#finish fromat date
+	print(f"{"ID":<10} {"Start day":<10} {"Time reamins":<10} {"building ID":<10} \n{"-" * 45}")
+	for _,p in info.sim_data["projects"].items(): 
+		print(p)#finish fromat date
 
 #buildings
 def build():
 	buildings_choices = {bld.name: {"return_value":bld, "desc":f"Tipus: {bld.type}, Minőség: {bld.quality}"} for bld in info.buildings}
 	new_building, _ = choice_input("Mit akarsz építeni:",buildings_choices)
 	if not new_building: return None
-	info.sim_data["projects"].update({0:new_building})#Finish ID GIVER!!!
+	info.sim_data["projects"].update({info.make_id(info.sim_data["projects"]) :new_building})#Finish ID GIVER!!!
 	print(f"Új projekt: {new_building.name},{new_building.type}",f"Befejezési idő: {new_building.finish_days} nap",sep="\n")
 
 def upgrade_building():
 	placed_builds = info.sim_data["buildings"]
 	build_choices = {bld.name: {"return_value": bld,"desc":f"Tipus: {bld.type}, Minőség: {bld.quality}"} for bld in placed_builds}
-	if len(placed_builds) <= 0: 
+	if len(placed_builds) <= 0: # no buildings
 		print(f"{info.Colors.FAIL}-No buildings were found-{info.Colors.ENDC}")
 		return None
-	shortcuts = {}
-	for Id, blding in placed_builds.items(): 
-		shortcuts.update( {blding.name: str(Id)} )#make id shortcuts
 
 	building_inp, _ = choice_input("Melyik épületet fejleszted:",build_choices)
 	if not building_inp: return None
@@ -133,34 +134,35 @@ def next_round():
 	projects = data["projects"]
 	buildings = data["buildings"]
 	citizens = data["citizens"]
-	new_disaster = disaster()
-	
-	data["day"]+=simulated_days
-	
-	#updateing, citiznes, buildings
-	print(f"{info.Colors.OKCYAN}Lakosok kalkulálása...{info.Colors.ENDC}")
-	for bld in buildings:
-		current_residents = [c for c in citizens if c.houseID == bld.ID]
-		free_space = (bld.area // 30) - len(current_residents)
 
-		for _ in free_space:
-			new_id = max(c.ID for c in citizens) + 1 if citizens else 1
-			#make job (0.1% cahnce to be jobless), FINISH, spktrum age (0,80)
-			new_citizen = info.Citizen(_ID=new_id, _born=data["day"], _job="munkanélküli", _houseID=bld.ID)
-			citizens.append(new_citizen)
-		bld.update()
+	for i in range(simulated_days):
+		new_disaster = disaster()
+		
+		data["day"]+=1
+		
+		#updateing, citiznes, buildings
+		for bld in buildings:
+			current_residents = [c for c in citizens if c.houseID == bld.ID]
+			free_space = (bld.area // 30) - len(current_residents)
 
-	print(f"{info.Colors.OKCYAN}Projektek engedélyezése...{info.Colors.ENDC}")
-	for Id,proj in projects.items():
-		if not proj.finished:
-			proj.check_done()
+			for _ in free_space:
+				new_id = max(c.ID for c in citizens) + 1 if citizens else 1
+				#make job (0.1% cahnce to be jobless), FINISH, spktrum age (0,80)
+				new_citizen = info.Citizen(_ID=new_id, _born=data["day"], _job="munkanélküli", _houseID=bld.ID)
+				citizens.append(new_citizen)
+			bld.update()
 
-#tax
-	print(f"{info.Colors.OKCYAN}Adók begyűjtése...{info.Colors.ENDC}")
-	for c in citizens:
-		#if over 18 assign job, if over 6 assign
-		if c.job and data["day"] - c.born > 18*365.25:
-			data["currency_M"] += const["tax_per_citizen"]
+		for Id,proj in projects.items():
+			if not proj.finished:
+				proj.check_done()
+
+	#tax
+		for c in citizens:
+			#if over 18 assign job, if over 6 assign
+			if c.job and data["day"] - c.born > 18*365.25:
+				data["currency_M"] += const["tax_per_citizen"]
+		
+		print(f"{info.Colors.OKCYAN}Day {i+1} simulated.{info.Colors.ENDC}")
 	show_reports()
 
 #end
