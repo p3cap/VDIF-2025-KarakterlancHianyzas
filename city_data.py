@@ -1,12 +1,13 @@
-import datetime, random as rng
+import random as rng
 
 #simuláció konstansok
 sim_const = { #area calcuated in m2
 	"currency_type": "HUF",
 	"area_for_citizen": 30,
+	"citizen_age_skpektrum": (0,80),
 	"min_hapiness": 20,
 	"max_hapiness": 100,
-	"max_rounds": 300,
+	"max_days": 30000,
 	"tax_per_citizen": 50000,
 	"area_per_service": 5, #mekkore terület után számít fel szolgáltatást egy meberre
 	"serice_requirements": { #%of pupultion, these will accumlate happiness
@@ -41,20 +42,23 @@ class Colors:
 
 #classes
 class Project:
-	def __init__(self, _finish_dict:dict):
+	services = ["egészségügy","munka","oktatás","közlekedés","rendőrség","bolt"]
+	def __init__(self):
 		self.finished = False
-		self.finish_dict = _finish_dict
-		self.start_date = datetime.datetime.now()
-		sim_data["projects"].update({len(sim_data["projects"]):self})
+		self.start_date = sim_data["day"]
 	def check_done(self):
-		if self.start_date - datetime.datetime.now() <= 0:
+		if self.start_date - sim_data["day"] <= 0:
 			self.finished = True
-			self.finish_dict.update({len(self.finish_dict)})
+			print(self.finish_dict)
+			self.finish_dict.update({len(sim_data["buildings"]):self})
+	def __format__(self, format_spec):
+		return f"Projekt"
 
 class Building(Project): #épület azonosító, név, típus (pl. lakóház, iskola), építés éve, hasznos terület. 
-	building_types = ["lakóház","munkahely","egészségügy","oktatás","közlekedés","rendőrség"]
-	def __init__(self, _cost_M:int=0, _area:int=0, _stories:int=0, _reliability:int=0, _finish_days:int=0,_type:str="",_name:str=""):
-		self.built = datetime.datetime.now()
+	building_types = ["lakóház","munkahely","kórház","iskola","rendőrség","bolt"]
+	def __init__(self, _cost_M:int=0, _area:int=0, _stories:int=0, _reliability:int=0, _finish_days:int=0,_type:list=[],_name:str=""):
+		super().__init__()
+		self.built = sim_data["day"]
 		self.cost = _cost_M
 		self.area = _area
 		self.stories = _stories
@@ -72,7 +76,7 @@ class Building(Project): #épület azonosító, név, típus (pl. lakóház, isk
 			print(key, value)
 			setattr(self, key, getattr(self, key) + value)
 	def update(self):
-		self.age = datetime.datetime().now() - self.built
+		self.age = sim_data["day"] - self.built
 
 	def get_valid_upgs(self):
 		valid_upgrades = []
@@ -83,10 +87,13 @@ class Building(Project): #épület azonosító, név, típus (pl. lakóház, isk
 					valid_upgrades.append(upg)
 
 		return valid_upgrades
+	def __format__(self, format_spec):
+		return f"Projekt"
 
 class Upgrade(Project):#szolgáltatás azonosító, név, típus (pl. egészségügy, közlekedés), kapcsolódó épület azonosítója. 
 #					^ will be in the buildigs upgarde list ^
 	def __init__(self, _name, _cost_M:int, _finish_days:int, _per_100:bool, _min_requirements:dict, _effects:dict):
+		super().__init__()
 		self.name = _name
 		self.cost = _cost_M
 		self._finish_days = _finish_days
@@ -95,9 +102,12 @@ class Upgrade(Project):#szolgáltatás azonosító, név, típus (pl. egészség
 		self.effect = _effects
 		self.started = 0
 		self.finish_dict = None #in this case the builduings upgrade dict
+	def __format__(self, format_spec):
+		return f"Projekt"
 
 class Disaster:
 	def __init__(self, _name, _strength:dict=0, _chance:float=0):
+		super().__init__()
 		self.name = _name
 		self.strength = _strength
 		self.chance = _chance
@@ -118,13 +128,18 @@ class Disaster:
 				setattr(self, "quality" + new_quality)
 
 		return dis_info
+	def __format__(self, format_spec):
+		return f"Projekt"
 
 class Citizen: #lakos azonosító, név, születési év, foglalkozás, lakóhely (kapcsolat az Épületek táblával). 
 	def __init__(self, _ID:int, _born:int, _job:str, _houseID:int):
+		super().__init__()
 		self.ID = _ID
 		self.born = _born
 		self.job = _job
 		self.houseID = _houseID
+	def __format__(self, format_spec):
+		return f"Projekt"
 
 buildings = [
 	# Lakó

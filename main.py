@@ -34,12 +34,13 @@ menu_tree = { #return_value -> actions volt, a choice_input egyszerűségének �
 	}
 }
 
-def open_menu(menu):
-	print(f"\n{info.Colors.OKGREEN}--{menu.get('desc')}--{info.Colors.ENDC}")
-	choice = events.choice_input("Választás: ", menu['return_value'])
-	if not choice: return None
-	if isinstance(choice['return_value'], dict): print("dict",choice);open_menu(choice) #submenu
-	else: choice['return_value']() #call the return value func
+def open_menu(menu, desc=""):
+	print(f"\n{info.Colors.OKGREEN}--{desc}--{info.Colors.ENDC}")
+	while True:
+		choice, next_desc = events.choice_input("Választás: ", menu)
+		if not choice: return None
+		if isinstance(choice, dict): open_menu(choice, next_desc) #submenu
+		else: choice() #call the return value func
 
 def checkEnd():
 	global simulating
@@ -48,11 +49,18 @@ def checkEnd():
 	return False
 
 def end_simulation():
-	print(f"{info.info.Colors.FAIL}GAME OVER")
+	log_export.export_city()
+	print(f"{info.info.Colors.FAIL}SIMULATION OVER, file saved")
+
 
 if __name__ == "__main__": #akkor indul csak el a program, ha egyenesn ezt a python filet indítjuk el és nem indul el ha hivatkozunk rá
 	with open("README.md",encoding="UTF-8") as file:
 		for e in file.readlines(): print(e)
 	while not checkEnd():
-		open_menu(menu_tree)
+		open_menu(menu_tree["return_value"], menu_tree["desc"])
 	end_simulation()
+
+
+#make types into list
+#make id maker
+#make 
