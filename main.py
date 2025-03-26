@@ -13,14 +13,14 @@ menu_tree = {  # return_value -> actions volt, a choice_input egyszerűségének
 				"upgr": {"return_value": events.upgrade_building, "desc": "Épület fejlesztése/felújítása"},
 				"next_round": {"return_value": events.next_round, "desc": "Következő kör (választott mennyiségű nap) le szimulálása."},
 				"stat": {"desc": "Statisztika kimutatási opciók",
-						"return_value": {
-							"info": {"return_value": events.show_info, "desc": "Szimulációs Információk"},
-							"jelentés": {"return_value": events.show_reports, "desc": "A jelenlegi kör jelentései [lakosok, pénz, stb..] mutatja meg"},
-							"list projects": {"return_value": events.list_projects, "desc": "Összes projekt statisztikáit mutatja ki"},
-							"list citizens": {"return_value": events.list_citizens, "desc": "Összes lakos statisztikáit mutatja ki"},
-							"list buildings": {"return_value": events.list_buildings, "desc": "Összes épület statisztikáit mutatja ki"},
-						}
+					"return_value": {
+						"info": {"return_value": events.show_info, "desc": "Szimulációs Információk"},
+						"jelentés": {"return_value": events.show_reports, "desc": "A jelenlegi kör jelentései [lakosok, pénz, stb..] mutatja meg"},
+						"list projects": {"return_value": events.list_projects, "desc": "Összes projekt statisztikáit mutatja ki"},
+						"list citizens": {"return_value": events.list_citizens, "desc": "Összes lakos statisztikáit mutatja ki"},
+						"list buildings": {"return_value": events.list_buildings, "desc": "Összes épület statisztikáit mutatja ki"},
 					}
+				}
 			}
 		},
 		"cvs adatok": {"desc": "CVS-file alapú, speciális épületek, városok importálása, exportálása",
