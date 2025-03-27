@@ -1,4 +1,4 @@
-import city_data as info, random as rng
+import city_data as info, random as rng, log_export, sys
 
 #input, formatting
 def format_number(amount):
@@ -51,7 +51,8 @@ def show_reports():
 	print(f"{"Boldogság:":<20} {info.sim_data["happiness"]}%")
 	print(f"{"Épületek:":<20} {len(info.sim_data["buildings"])} db")
 	print(f"{"Polgárok:":<20} {len(info.sim_data["citizens"])} db")
-	print(f"{"Panaszok:":<20} {"WIP"}")  
+	print("Panaszok:")
+	for e in info.sim_data["complaints"]: print(e["desc"])  
 	print(info.Colors.HEADER, "-" * 40, info.Colors.ENDC)  
 
 
@@ -79,20 +80,19 @@ def build():
 
 def upgrade_building():
 	placed_builds = info.sim_data["buildings"]
-	build_choices = {bld.name: {"return_value": bld,"desc":f"Tipus: {bld.type}, Minőség: {bld.quality}"} for bld in placed_builds}
+	build_choices = {bld.name: {"return_value": bld,"desc":f"ID:{Id}{format(bld)}"} for Id,bld in placed_builds.items()}
 	if len(placed_builds) <= 0: # no buildings
 		print(f"{info.Colors.FAIL}-No buildings were found-{info.Colors.ENDC}")
 		return None
 
 	building_inp, _ = choice_input("Melyik épületet fejleszted:",build_choices)
 	if not building_inp: return None
-	building = placed_builds[building_inp]
-	valid_upgs = {upg.name: {"return_value": upg.name, "desc":f"Ár: {upg.cost_M}, Hatások: {upg.effects}, Projekt idő: {upg.build_days} nap"} for upg in building.get_valid_upgs()}
-	if len(valid_upgs) > 0:
+	valid_upgs = {upg.name: {"return_value": upg, "desc":f"Ár: {upg.cost_M}, Hatások: {upg.effects}, Projekt idő: {upg.build_days} nap"} for upg in building.get_valid_upgs()}
+	if len(valid_upgs) > 0: #fomatting prob.
 		upg_inp, _ = choice_input("Megfizethető fejlesztések:", valid_upgs)
 		if not upg_inp: return None
 		new_upg = info.upgrades[upg_inp]
-		new_upg.finish_dict = building.upgrades #when finished goes into the builds upg dict
+		new_upg.finish_dict = building_inp.services #when finished goes into the builds upg dict
 	else:
 		print("Nincsenek elérhető fejlesztések ehhez az épülethez.")
 		return None
@@ -105,12 +105,14 @@ def custom_building():
 		_reliability=number_input("Megbízhatósági érték (0-100): "),
 		_type=choice_input("Épület fajtája: ", {e:{"return_value":e,"desc":"Épület típus"} for e in info.Building.building_types})[0] or info.Building.building_types[0]
 	))
+	#add services while true input
 
 #random events handling
 def disaster():
 	chances = [dis.chance for dis in info.disasters]
 	dis = rng.choices(info.disasters, weights=chances)[0]
-	if dis.name != "nincs katasztrófa": return None
+	if dis.name != "nincs katasztrófa": return dis
+	else: return None
 
 #forduló_szimulálása (should be a city class.....)
 def calcualte_happiness():
@@ -124,17 +126,19 @@ def calcualte_happiness():
 			service_rate[service] += float(bld.area//const["area_per_service"])*float(bld.quality/5)
 
 	for key,req in service_req.items():
-		if not service_req.get(key): 
-			happiness *= 0.8
-			info.sim_data["complaints"].update({"desc":f"Nincsen {key} szolgáltatás!","day":info.sim_data["day"]})
+		if not service_rate.get(key): 
+			happiness *= 0.5
+			info.sim_data["complaints"].append({"desc":f"Nincsen {key} szolgáltatás!","day":info.sim_data["day"]})
 		else:
 			service_happiness = min(req/service_req[key], len(service_req)/const["max_happiness"])
 			if service_happiness < len(service_req)/const["max_happiness"]:
-				info.sim_data["complaints"].update({"desc":f"Kevés a(z) {key} szolgáltatás! ({req/service_req[key]}/{len(service_req)/const["max_happiness"]})","day":info.sim_data["day"]})
+				info.sim_data["complaints"].append({"desc":f"Kevés a(z) {key} szolgáltatás! ({req/service_req[key]}/{len(service_req)/const["max_happiness"]})","day":info.sim_data["day"]})
 			happiness += service_happiness
+	return happiness
 
 
 def next_round():
+	info.sim_data["complaints"].clear()
   #under 18 wont pay tax, based on happiness
 	simulated_days = number_input("Hány napot akarsz leszimulálni?: ")
 	const = info.sim_const
@@ -144,12 +148,16 @@ def next_round():
 	citizens = data["citizens"]
 
 	for i in range(simulated_days):
-		new_disaster = disaster()
-		data["happiness"] = calcualte_happiness()
-		
 		data["day"]+=1
-		
-		#updateing, citiznes, buildings
+		data["happiness"] = calcualte_happiness()
+		new_disaster = disaster()
+		if new_disaster: 
+			dis_info = new_disaster.activate()
+			print(f"{info.Colors.WARNING}Természeti katasztrófa történt: {new_disaster.name}, méret:{dis_info['size']}")
+			print(f"Érintett épületek száma: {len(dis_info['damaged_builds'])} ,kár mennyisége: {format_number(dis_info['repair_cost_M'])}{info.sim_const['currency_type']}")
+			damaged_buildings_desc = ", ".join(f"{Id}: {info.sim_data['buildings'][Id].name}" for Id in dis_info["damaged_builds"])
+			if choice_input("Megjavítod?", {"igen": {"return_value": True, "desc": damaged_buildings_desc}}): new_disaster.repair(dis_info)
+		#updating, citiznes, buildings
 		for Id,bld in buildings.items():
 			current_residents = [c for key,c in citizens.items() if c.houseID == Id]
 			free_space = (bld.area // info.sim_const["area_for_citizen"]) - len(current_residents)
@@ -158,7 +166,6 @@ def next_round():
 				#make job (0.1% cahnce to be jobless), FINISH, spktrum age (0,80)
 				new_citizen = info.Citizen( _born=data["day"], _job="munkanélküli", _houseID=Id)
 				citizens.update({info.make_id(citizens): new_citizen})
-			bld.update()
 
 		for Id,proj in projects.items():
 			if not proj.finished:
@@ -169,11 +176,27 @@ def next_round():
 		for Id,c in citizens.items():
 			#if over 18 assign job, if over 6 assign, DOIT
 			if c.job and data["day"] - c.born > 18*365.25:
-				data["currency_M"] += const["tax_per_citizen"]*(data["happiness"]/const["max_happiness"])
+				tax = const["tax_per_citizen"]*(data["happiness"]/const["max_happiness"])
+				data["currency_M"] += tax
+				total_tax += tax
 		
 		print(f"{info.Colors.OKCYAN}Day {i+1} simulated.{info.Colors.ENDC}")
+		print(f"{info.Colors.OKCYAN}	Adó bevétel: {total_tax}{info.sim_const["currency_type"]}{info.Colors.ENDC}")
+		print(f"{info.Colors.OKCYAN}	Panaszok: {len(info.sim_data["complaints"])}db{info.Colors.ENDC}")
 	show_reports()
 
 #end
 def exit_action():
   print(f"{info.Colors.FAIL}-megszakítva-{info.Colors.ENDC}")
+
+def checkEnd():
+	if info.sim_data["happiness"] < info.sim_const["min_happiness"]: 
+		return True
+	elif info.sim_data["currency_M"] <= 0: 
+		return True
+	return False
+
+def end_simulation():
+	log_export.export_city()
+	print(f"{info.Colors.FAIL}SIMULATION OVER, file saved")
+	sys.exit()

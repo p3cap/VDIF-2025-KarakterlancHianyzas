@@ -11,7 +11,7 @@ sim_const = { #area calcuated in m2
 	"tax_per_citizen": 50000,
 	"area_per_service": 5, #mekkore terület után számít fel szolgáltatást egy meberre
 	"serice_requirements": { #%of pupultion, these will accumlate happiness
-		"egészségügy": 0.1,#10%
+		"egészségügy": 0.3,#10%
 		"munkahely": 0.9,
 		"oktatás": 0.25,
 		"közlekedés": 0.8,
@@ -26,7 +26,7 @@ sim_data = {
 	"buildings": {},
 	"citizens": {},
 	"projects": {},
-	"complaints": {},
+	"complaints": [],
 	"start_year": 2025,
 	"day": 0,
 }
@@ -43,7 +43,6 @@ class Colors:
 
 #classes
 class Project:
-	services = ["egészségügy","munka","oktatás","közlekedés","rendőrség","bolt"]
 	def __init__(self):
 		self.finished = False
 		self.start_date = sim_data["day"]
@@ -67,17 +66,13 @@ class Building(Project): #épület azonosító, név, típus (pl. lakóház, isk
 		self.type = _type
 		self.services = _services
 		self.name = _name or input("Épület neve: ") or "N/A"
-		self.quality = 2.5
-		self.upgrades = {}
+		self.quality = 5
 		self.finish_dict = sim_data["buildings"]
-		self.age = 0
 	def upgrade(self,upg):
 		if not upg:return
 		for key, value in upg.effects:
 			print(key, value)
 			setattr(self, key, getattr(self, key) + value)
-	def update(self):
-		self.age = sim_data["day"] - self.built
 
 	def get_valid_upgs(self):
 		valid_upgrades = []
@@ -113,28 +108,30 @@ class Disaster:
 		self.strength = _strength
 		self.chance = _chance
 
-	def activate_disaster(self):
+	def activate(self):
 		dis_info = {
-			"size": rng.randint(1, 5),
-			"damaged_builds": [],
+			"size": rng.choices([1, 2, 3, 4, 5], weights=[5, 3, 1, 0.5, 0.1])[0],#higher number has less chance #WHY IS THIS A LIST ERROR FIX
+			"damaged_builds": {},
 			"repair_cost_M": 0
 		}
-		buildings = list(sim_data["buildings"].values())  # Convert dictionary values to a list
-		if not buildings:
-			return dis_info  # Return early if there are no buildings
+		buildings = list(sim_data["buildings"].values())
+		if not buildings: return dis_info #fölös kód futtatás elkerülése
 
-		min_affected = max(1, len(buildings) // 10)
-		max_affected = min(len(buildings), rng.randint(min_affected, len(buildings)))
-
-		for building in rng.sample(buildings, rng.randint(min_affected, max_affected)):
-			if building.type in self.strength:
-				damage = self.strength[building.type]
-				new_quality = max(0, building.quality - damage)
-				dis_info["damaged_builds"].append(building.name)
-				dis_info["repair_cost_M"] += (building.quality - new_quality) * 0.05 * building.cost
-				building.quality = new_quality  # Correctly update the building's quality
+		for Id, bld in sim_data["buildings"].items():
+			if rng.randint(1, 5) <= dis_info["size"]:
+				new_quality = max(0, bld.quality - rng.randrange(1,dis_info["size"]))
+				dis_info["damaged_builds"].update({Id: bld.quality})
+				dis_info["repair_cost_M"] += (bld.quality - new_quality) * 0.05 * bld.cost
+				bld.quality = new_quality
 
 		return dis_info
+	
+	def repair(self,dis_info:dict):
+		print(f"{len(dis_info["damaged_builds"])}db épület javítása, {dis_info["repair_cost_M"]}M-ért...")
+		sim_data["currency_M"] -= dis_info["repair_cost_M"]
+		for Id,org_quality in dis_info["damaged_builds"]:
+			sim_data["buildings"][Id].quality = org_quality
+
 
 	def __format__(self, format_spec):
 		return f"Disatser"
@@ -154,6 +151,7 @@ def make_id(data_dict):
 
 
 buildings = [
+	#["egészségügy","munka","oktatás","közlekedés","rendőrség","bolt"]
 	# Lakó
 	Building(_name="családi ház", _cost_M=60, _area=150, _stories=1, _reliability=98, _type="lakóház"),
 	Building(_name="ikerház", _cost_M=75, _area=300, _stories=2, _reliability=98, _type="lakóház"),
@@ -161,10 +159,10 @@ buildings = [
 	Building(_name="lakótelepi épület", _cost_M=900, _area=6000, _stories=10, _reliability=89, _type="lakóház"),
 	
 	# Egészség
-	Building(_name="mini rendelő", _cost_M=90, _area=100, _stories=1, _reliability=92, _type="egészség"),
-	Building(_name="szakorvosi rendelő", _cost_M=600, _area=1200, _stories=2, _reliability=90, _type="egészség"),
-	Building(_name="kórház", _cost_M=2800, _area=5000, _stories=4, _reliability=90, _type="egészség"),
-	Building(_name="klinikai központ", _cost_M=6000, _area=10000, _stories=6, _reliability=88, _type="egészség"),
+	Building(_name="mini rendelő", _cost_M=90, _area=100, _stories=1, _reliability=92, _type="kórház"),
+	Building(_name="szakorvosi rendelő", _cost_M=600, _area=1200, _stories=2, _reliability=90, _type="kórház"),
+	Building(_name="kórház", _cost_M=2800, _area=5000, _stories=4, _reliability=90, _type="kórház"),
+	Building(_name="klinikai központ", _cost_M=6000, _area=10000, _stories=6, _reliability=88, _type="kórház"),
 
 	# Oktatás
 	Building(_name="óvoda", _cost_M=325, _area=500, _stories=2, _reliability=93, _type="oktatás"),
@@ -173,7 +171,7 @@ buildings = [
 	Building(_name="egyetem", _cost_M=3000, _area=5500, _stories=4, _reliability=95, _type="oktatás"),
 
 	# Munka
-	Building(_name="kisbolt", _cost_M=250, _area=300, _stories=1, _reliability=97, _type="munka"),
+	Building(_name="kisbolt", _cost_M=250, _area=300, _stories=1, _reliability=97, _type="munka", _services=[]),
 	Building(_name="irodaház", _cost_M=1500, _area=10000, _stories=5, _reliability=95, _type="munka"),
 	Building(_name="bevásárlóközpont", _cost_M=5000, _area=20000, _stories=3, _reliability=90, _type="munka"),
 	Building(_name="ipari park", _cost_M=10000, _area=50000, _stories=2, _reliability=85, _type="munka"),
@@ -194,16 +192,15 @@ upgrades = [
 	Upgrade(_name="napkollektor telepítés", _cost_M=0.5, _finish_days=45, _per_100=False, _min_requirements={"stories": 1}, _effects={"quality": 4, "reliability": 10}),
 	Upgrade(_name="okosotthon rendszer", _cost_M=0.7, _finish_days=60, _per_100=False, _min_requirements={"type": "lakó"}, _effects={"quality": 5, "reliability": 5}),
 	
-	Upgrade(_name="hőszivattyú", _cost_M=1, _finish_days=45, _per_100=False, _min_requirements={"type": "lakó", "age": 2}, _effects={"quality": 3, "reliability": 5}),
+	Upgrade(_name="hőszivattyú", _cost_M=1, _finish_days=45, _per_100=False, _min_requirements={"type": "lakó"}, _effects={"quality": 3, "reliability": 5}),
 	Upgrade(_name="biztonsági rendszer", _cost_M=0.6, _finish_days=30, _per_100=False, _min_requirements={"type": "munka"}, _effects={"reliability": 10}),
 	Upgrade(_name="térfigyelő kamerák", _cost_M=0.4, _finish_days=25, _per_100=False, _min_requirements={"type": "közlekedés"}, _effects={"reliability": 7}),
 	Upgrade(_name="környezetbarát burkolatok", _cost_M=0.3, _finish_days=20, _per_100=True, _min_requirements={"area": 500}, _effects={"quality": 2}),
-	Upgrade(_name="zöldtető", _cost_M=1.5, _finish_days=90, _per_100=False, _min_requirements={"stories": 2, "age": 5}, _effects={"quality": 5, "reliability": 3}),
+	Upgrade(_name="zöldtető", _cost_M=1.5, _finish_days=90, _per_100=False, _min_requirements={"stories": 2}, _effects={"quality": 5, "reliability": 3}),
 	Upgrade(_name="elektromos töltőállomás", _cost_M=2, _finish_days=60, _per_100=False, _min_requirements={"type": "munka"}, _effects={"quality": 4}),
-	Upgrade(_name="intelligens világítás", _cost_M=0.5, _finish_days=40, _per_100=False, _min_requirements={"age": 3}, _effects={"quality": 3, "reliability": 2}),
-	Upgrade(_name="modern csatornarendszer", _cost_M=1, _finish_days=60, _per_100=True, _min_requirements={"age": 10, "area": 1000}, _effects={"reliability": 8}),
-	Upgrade(_name="hangszigetelés", _cost_M=0.8, _finish_days=50, _per_100=True, _min_requirements={"type": "lakó", "age": 3}, _effects={"quality": 3}),
-	Upgrade(_name="faültetés", _cost_M=0.2, _finish_days=10, _per_100=True, _min_requirements={"area": 200}, _effects={"quality": 1})
+	Upgrade(_name="intelligens világítás", _cost_M=0.5, _finish_days=40, _per_100=False, _min_requirements={}, _effects={"quality": 3, "reliability": 2}),
+	Upgrade(_name="modern csatornarendszer", _cost_M=1, _finish_days=60, _per_100=True, _min_requirements={"area": 1000}, _effects={"reliability": 8}),
+	Upgrade(_name="hangszigetelés", _cost_M=0.8, _finish_days=50, _per_100=True, _min_requirements={"type": "lakó"}, _effects={"quality": 3}),
 ]
 disasters = [
 	Disaster(_name="cunami", _strength=4, _chance=0.22),

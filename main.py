@@ -1,4 +1,4 @@
-import random, os, datetime
+import sys
 import events, log_export
 import city_data as info
 
@@ -45,26 +45,12 @@ def open_menu(menu, desc=""):
 			open_menu(choice, next_desc)  # submenu
 		else: 
 			choice()  # call the return value func
-
-def checkEnd():
-	if info.sim_data["happiness"] < info.sim_const["min_happiness"]: 
-		return True
-	elif info.sim_data["currency_M"] <= 0: 
-		return True
-	return False
-
-def end_simulation():
-	log_export.export_city()
-	print(f"{info.Colors.FAIL}SIMULATION OVER, file saved")
+	
 
 if __name__ == "__main__":
 	with open("README.md", encoding="UTF-8") as file:
 		for e in file.readlines(): 
 			print(e)
-	while not checkEnd():
+	while not events.checkEnd():
 		open_menu(menu_tree["return_value"], menu_tree["desc"])
-	end_simulation()
-
-# make types into list
-# make id maker
-# make
+	events.end_simulation()
