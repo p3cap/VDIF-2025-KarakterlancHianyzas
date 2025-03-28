@@ -198,7 +198,7 @@ buildings = [
     Building(_name="repülőtér", _cost_M=20000, _area=100000, _stories=3, _reliability=80, _type="közlekedés", _services=["közlekedés"], _finish_days=1500),
 
     # Rendőrség
-    Building(_name="rendőrörs", _cost_M=1200, _area=1500, _stories=2, _reliability=95, _type="rendőrség", _services=["rendőrség"], _finish_days=500),
+    Building(_name="rendőrőrs", _cost_M=1200, _area=1500, _stories=2, _reliability=95, _type="rendőrség", _services=["rendőrség"], _finish_days=500),
     Building(_name="rendőrkapitányság", _cost_M=5000, _area=8000, _stories=4, _reliability=90, _type="rendőrség", _services=["rendőrség"], _finish_days=800)
 ]
 
