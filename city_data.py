@@ -134,7 +134,7 @@ class Disaster:
 		return dis_info
 	
 	def repair(self,dis_info:dict):
-		print(f"{len(dis_info["damaged_builds"])}db épület javítása, {dis_info["repair_cost_M"]}M-ért...")
+		print(f"{len(dis_info['damaged_builds'])}db épület javítása, {dis_info['repair_cost_M']}M-ért...")
 		sim_data["currency_M"] -= dis_info["repair_cost_M"]
 		for Id,org_quality in dis_info["damaged_builds"].items():
 			sim_data["buildings"][Id].quality = org_quality
