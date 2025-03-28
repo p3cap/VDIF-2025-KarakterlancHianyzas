@@ -89,14 +89,13 @@ def upgrade_building():
 
 	building_inp, _ = choice_input("Melyik épületet fejleszted:",build_choices)
 	if not building_inp: return None
-	valid_upgs = {upg.name: {"return_value": upg, "desc":f"Ár: {upg.cost_M}, Hatások: {upg.effects}, Projekt idő: {upg.build_days} nap"} for upg in building_inp.get_valid_upgs()}
+	valid_upgs = {upg.name: {"return_value": upg, "desc":f"Ár: {upg.cost}, Hatások: {upg.effects}, Projekt idő: {upg.finish_days} nap"} for upg in building_inp.get_valid_upgs()}
 	if len(valid_upgs) > 0:
 		upg_inp, _ = choice_input("Megfizethető fejlesztések:", valid_upgs)
 		if not upg_inp: return None
-		new_upg = info.upgrades[upg_inp]
-		new_upg.finish_dict = building_inp.services #when finished goes into the builds upg dict
-		info.sim_data["currency_M"] -= new_upg.cost
-		print(f"Új projekt: {new_upg.name},{new_upg.type}",f"Befejezési idő: {new_upg.finish_days} nap",sep="\n")
+		upg_inp.finish_dict = building_inp.services #when finished goes into the builds upg dict
+		info.sim_data["currency_M"] -= upg_inp.cost
+		print(f"Új projekt: {upg_inp.name}",f"Befejezési idő: {upg_inp.finish_days} nap",sep="\n")
 		print(f"Megmaradt valuta: {format_number(info.sim_data["currency_M"])}")
 	else:
 		print("Nincsenek elérhető fejlesztések ehhez az épülethez.")

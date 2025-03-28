@@ -99,10 +99,10 @@ class Upgrade(Project):#szolgáltatás azonosító, név, típus (pl. egészség
 		super().__init__()
 		self.name = _name
 		self.cost = _cost_M
-		self._finish_days = _finish_days
+		self.finish_days = _finish_days
 		self.per_100 = _per_100
 		self.min_req = _min_requirements
-		self.effect = _effects
+		self.effects = _effects
 		self.started = 0
 		self.finish_dict = None #in this case the builduings upgrade dict
 	def __format__(self, format_spec):
