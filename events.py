@@ -104,7 +104,7 @@ def upgrade_building():
 def custom_building():
 	info.buildings.append(info.Building(
 		_cost_M=number_input("Épület ára (Milliókban): "),
-		_area=number_input("Épület területe (m2-be): "),
+		_area=number_input("Épület területe (m2-ben): "),
 		_stories=number_input("Emeletek száma: "),
 		_reliability=number_input("Megbízhatósági érték (0-100): "),
 		_type=choice_input("Épület fajtája: ", {e:{'return_value':e,'desc':"Épület típus"} for e in info.Building.building_types})[0] or info.Building.building_types[0]
@@ -159,7 +159,7 @@ def next_round():
 		if new_disaster:
 			dis_info = new_disaster.activate()
 			print(f"{info.Colors.WARNING}Természeti katasztrófa történt: {new_disaster.name}, méret:{dis_info['size']}")
-			print(f"Érintett épületek száma: {len(dis_info['damaged_builds'])} ,kár mennyisége: {format_number(dis_info['repair_cost_M'])}{info.sim_const['currency_type']}")
+			print(f"Érintett épületek száma: {len(dis_info['damaged_builds'])}, kár mennyisége: {format_number(dis_info['repair_cost_M'])}{info.sim_const['currency_type']}")
 			damaged_buildings_desc = ", ".join(f"{Id}: {info.sim_data['buildings'][Id].name}" for Id in dis_info["damaged_builds"])
 			if choice_input("Megjavítod?", {'igen': {'return_value': True, 'desc': damaged_buildings_desc}}): 
 				new_disaster.repair(dis_info)

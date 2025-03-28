@@ -11,7 +11,7 @@ menu_tree = {  # return_value -> actions volt, a choice_input egyszerűségének
 			"return_value": {
 				"epit": {"return_value": events.build, "desc": "Épület építése"},
 				"upgr": {"return_value": events.upgrade_building, "desc": "Épület fejlesztése/felújítása"},
-				"next_round": {"return_value": events.next_round, "desc": "Következő kör (választott mennyiségű nap) le szimulálása."},
+				"next_round": {"return_value": events.next_round, "desc": "Következő kör (választott mennyiségű nap) leszimulálása."},
 				"stat": {"desc": "Statisztika kimutatási opciók",
 					"return_value": {
 						"info": {"return_value": events.show_info, "desc": "Szimulációs Információk"},
