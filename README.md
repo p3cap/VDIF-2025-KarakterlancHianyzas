@@ -6,5 +6,5 @@
 *feladat rövid leírása:* város építő szimuláció program és adatkimutatások
 
 ### *Használat:*
-- **main.py** elindításával a program már fut is!
+- _**main.py**_ elindításával a program már fut is!
 - mentett szimuációs adatok mappa neve: *saves*
