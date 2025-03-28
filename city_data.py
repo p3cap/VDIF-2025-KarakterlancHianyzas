@@ -6,7 +6,7 @@ sim_const = { #area calcuated in m2
 	"area_for_citizen": 30,
 	"citizen_age_skpektrum": (0,80),
 	"tax_payer_spektrum": (18,60),
-	"no_tax_jobs":["munkanélküli","tanuló","nyugdíjjas"],
+	"no_tax_jobs":["munkanélküli","tanuló","nyugdíjas"],
 	"min_happiness": 20,
 	"max_happiness": 100,
 	"max_days": 30000,
@@ -154,7 +154,7 @@ class Citizen: #lakos azonosító, név, születési év, foglalkozás, lakóhel
 		age = sim_data["day"] - self.born
 		available_jobs = [bld for bld in sim_data["buildings"].values() if "munkahely" in bld.services]
 		if sim_const["citizen_age_skpektrum"][0] > age: self.job = "tanuló"
-		elif sim_const["citizen_age_skpektrum"][1] < age: self.job = "nyugdíjjas"
+		elif sim_const["citizen_age_skpektrum"][1] < age: self.job = "nyugdíjas"
 		elif not available_jobs: self.job = "munkanélküli"
 		else:self.job = rng.choice(available_jobs).type # assign job
 		
