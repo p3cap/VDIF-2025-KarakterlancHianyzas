@@ -1,5 +1,5 @@
 # VDIF KarakterlancHiányzás
-Vadasz Denes Informatika Versenyen
+Vadász Dénes Informatika Verseny
  
 *csapatnév*: <karakterlánc hiányzás> csapat
 
