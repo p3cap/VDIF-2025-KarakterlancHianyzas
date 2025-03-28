@@ -57,18 +57,18 @@ def show_reports():
 
 
 def list_citizens():
-	print(f"{"ID":<10} {"Born":<10} {"Job":<10} {"HouseID":<10} \n{"-" * 45}")
+	print(f"{"ID":<20} {"Born":<20} {"Job":<20} {"HouseID":<20} \n{"-" * 90}")
 	for Id,c in info.sim_data["citizens"].items():
-		print(f"{Id:<10}{format(c)}")
+		print(f"{Id:<20}{format(c)}")
 def list_buildings():
-	print(f"{"ID":<10} {"Épület neve":<10} {"Tipus":<10} {"Szolgáltatások":<10} \n{"-" * 45}")
+	print(f"{"ID":<20} {"Épület neve":<20} {"Tipus":<20} {"Szolgáltatások":<20} \n{"-" * 90}")
 	for Id,b in info.sim_data["buildings"].items():
-		print(f"{Id:<10}{format(b)}")
+		print(f"{Id:<20}{format(b)}")
 def list_projects():
 	print(info.sim_data["projects"])
-	print(f"{"ID":<10} {"Projekt neve:":<10} {"Befejezéshez szükséges napok:":<10} \n{"-" * 45}")
+	print(f"{"ID":<20} {"Projekt neve:":<20} {"Befejezéshez szükséges napok:":<20} \n{"-" * 90}")
 	for Id,p in info.sim_data["projects"].items(): 
-		print(f"{Id:<10}{p.name:<10}{p.finish_days-(p.start_date-info.sim_data["day"]):<10}")
+		print(f"{Id:<20}{p.name:<20}{p.finish_days-(p.start_date-info.sim_data["day"]):<20}")
 
 #buildings
 def build():

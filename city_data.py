@@ -91,7 +91,7 @@ class Building(Project): #épület azonosító, név, típus (pl. lakóház, isk
 
 		return valid_upgrades
 	def __format__(self, format_spec):
-		return f"{self.name:<10}{self.type:<10}{self.services}"
+		return f"{self.name:<20}{self.type:<20}{self.services}"
 
 class Upgrade(Project):#szolgáltatás azonosító, név, típus (pl. egészségügy, közlekedés), kapcsolódó épület azonosítója. 
 #					^ will be in the buildigs upgarde list ^
@@ -159,7 +159,7 @@ class Citizen: #lakos azonosító, név, születési év, foglalkozás, lakóhel
 		else:self.job = rng.choice(available_jobs).type # assign job
 		
 	def __format__(self, format_spec):
-		return f"{self.born:<10}{self.job:<10}{self.houseID:<10}"
+		return f"{self.born:<20}{self.job:<20}{self.houseID:<20}"
 
 def make_id(data_dict):
 	if not data_dict:return 1
