@@ -25,7 +25,7 @@ menu_tree = {  # return_value -> actions volt, a choice_input egyszerűségének
 		},
 		"szimuláció mentések": {"desc": "Szimulációs adatok mentése, betöltése",
 			"return_value": {
-				"szimuláció mentése": {"return_value": log_export.save_simulation, "desc": "Elmenti a szimulációt a saves maooába"},
+				"szimuláció mentése": {"return_value": log_export.save_simulation, "desc": "Elmenti a szimulációt a saves mappába"},
 				"mentett szimuláció betöltése": {"return_value": log_export.load_simulation, "desc": "A saves mappából betölhető mentések."},
 				"make_custom_building": {"return_value": events.custom_building, "desc": "Saját típusú épület létrehozása"},
 			}
