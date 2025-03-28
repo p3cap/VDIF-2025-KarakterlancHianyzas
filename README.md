@@ -1,5 +1,6 @@
 # VDIF KarakterlancHiányzás
  Vadasz Denes Informatika Versenyen - <karakterlánc hiányzás> csapat
+ BMSZC Puskás Tivadar Távközlési és Informatikai Technikum
 
 *Csapat tagjai:* Dobosi Péter, Kovács Dávid, Vaszkó Örs
 
