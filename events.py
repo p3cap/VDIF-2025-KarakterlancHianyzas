@@ -103,7 +103,7 @@ def upgrade_building():
 
 def custom_building():
 	info.buildings.append(info.Building(
-		_cost_M=number_input("Épület ára (Milliókba): "),
+		_cost_M=number_input("Épület ára (Milliókban): "),
 		_area=number_input("Épület területe (m2-be): "),
 		_stories=number_input("Emeletek száma: "),
 		_reliability=number_input("Megbízhatósági érték (0-100): "),
