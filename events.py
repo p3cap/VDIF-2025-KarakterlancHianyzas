@@ -66,33 +66,38 @@ def list_buildings():
 		print(f"{Id:<10}{format(b)}")
 def list_projects():
 	print(info.sim_data["projects"])
-	print(f"{"ID":<10} {"Start day":<10} {"Befejezéshez szükséges napok:":<10} \n{"-" * 45}")
+	print(f"{"ID":<10} {"Projekt neve:":<10} {"Befejezéshez szükséges napok:":<10} \n{"-" * 45}")
 	for Id,p in info.sim_data["projects"].items(): 
-		print(f"{Id:<10}{p.start_date:<10}{p.finish_days:<10}")
+		print(f"{Id:<10}{p.name:<10}{p.finish_days-(p.start_date-info.sim_data["day"]):<10}")
 
 #buildings
 def build():
-	buildings_choices = {bld.name: {"return_value":bld, "desc":f"Tipus: {bld.type}, Minőség: {bld.quality}"} for bld in info.buildings}
+	buildings_choices = {bld.name: {"return_value":bld, "desc":f"Tipus: {bld.type}, Ár: {format_number(bld.cost)}{info.sim_const["currency_type"]}"} for bld in info.buildings}
 	new_building, _ = choice_input("Mit akarsz építeni:",buildings_choices)
 	if not new_building: return None
-	info.sim_data["projects"].update({info.make_id(info.sim_data["projects"]) :new_building})#Finish ID GIVER!!!
+	info.sim_data["projects"].update({info.make_id(info.sim_data["projects"]) :new_building})
+	info.sim_data["currency_M"] -= new_building.cost
 	print(f"Új projekt: {new_building.name},{new_building.type}",f"Befejezési idő: {new_building.finish_days} nap",sep="\n")
+	print(f"Megmaradt valuta: {format_number(info.sim_data["currency_M"])}")
 
 def upgrade_building():
 	placed_builds = info.sim_data["buildings"]
 	build_choices = {bld.name: {"return_value": bld,"desc":f"ID:{Id}{format(bld)}"} for Id,bld in placed_builds.items()}
 	if len(placed_builds) <= 0: # no buildings
-		print(f"{info.Colors.FAIL}-No buildings were found-{info.Colors.ENDC}")
+		print(f"{info.Colors.FAIL}-Nincsen fejleszthető épület a városban-{info.Colors.ENDC}")
 		return None
 
 	building_inp, _ = choice_input("Melyik épületet fejleszted:",build_choices)
 	if not building_inp: return None
-	valid_upgs = {upg.name: {"return_value": upg, "desc":f"Ár: {upg.cost_M}, Hatások: {upg.effects}, Projekt idő: {upg.build_days} nap"} for upg in building.get_valid_upgs()}
-	if len(valid_upgs) > 0: #fomatting prob.
+	valid_upgs = {upg.name: {"return_value": upg, "desc":f"Ár: {upg.cost_M}, Hatások: {upg.effects}, Projekt idő: {upg.build_days} nap"} for upg in building_inp.get_valid_upgs()}
+	if len(valid_upgs) > 0:
 		upg_inp, _ = choice_input("Megfizethető fejlesztések:", valid_upgs)
 		if not upg_inp: return None
 		new_upg = info.upgrades[upg_inp]
 		new_upg.finish_dict = building_inp.services #when finished goes into the builds upg dict
+		info.sim_data["currency_M"] -= new_upg.cost
+		print(f"Új projekt: {new_upg.name},{new_upg.type}",f"Befejezési idő: {new_upg.finish_days} nap",sep="\n")
+		print(f"Megmaradt valuta: {format_number(info.sim_data["currency_M"])}")
 	else:
 		print("Nincsenek elérhető fejlesztések ehhez az épülethez.")
 		return None
@@ -115,74 +120,76 @@ def disaster():
 	else: return None
 
 #forduló_szimulálása (should be a city class.....)
-def calcualte_happiness():
+def calculate_happiness():
+	if len(info.sim_data["citizens"]) < 1: return 100
 	const = info.sim_const
-	service_req = const["serice_requirements"]
+	service_req = const["service_requirements"]
 	happiness = 0
 	service_rate = {}
-	for Id,bld in info.sim_data["buildings"].items():
+	for Id, bld in info.sim_data["buildings"].items():
 		for service in bld.services:
-			if service not in service_rate.keys(): service_rate.update({service:0})
-			service_rate[service] += float(bld.area//const["area_per_service"])*float(bld.quality/5)
+			if service not in service_rate.keys():
+				service_rate.update({service: 0})
+			service_rate[service] += float(bld.area // const["area_per_service"]) * float(bld.quality / 5)
 
-	for key,req in service_req.items():
+	for key, req in service_req.items():
 		if not service_rate.get(key): 
 			happiness *= 0.5
-			info.sim_data["complaints"].append({"desc":f"Nincsen {key} szolgáltatás!","day":info.sim_data["day"]})
+			info.sim_data["complaints"].append({"desc": f"Nincsen {key} szolgáltatás!", "day": info.sim_data["day"]})
 		else:
-			service_happiness = min(req/service_req[key], len(service_req)/const["max_happiness"])
-			if service_happiness < len(service_req)/const["max_happiness"]:
-				info.sim_data["complaints"].append({"desc":f"Kevés a(z) {key} szolgáltatás! ({req/service_req[key]}/{len(service_req)/const["max_happiness"]})","day":info.sim_data["day"]})
+			service_happiness = min(service_rate[key] / req, const["max_happiness"] / len(service_req))
+			if service_happiness < const["max_happiness"] / len(service_req):
+				info.sim_data["complaints"].append({"desc": f"Kevés a(z) {key} szolgáltatás! ({service_rate[key]}/{req})", "day": info.sim_data["day"]})
 			happiness += service_happiness
 	return happiness
 
 
 def next_round():
-	info.sim_data["complaints"].clear()
   #under 18 wont pay tax, based on happiness
 	simulated_days = number_input("Hány napot akarsz leszimulálni?: ")
 	const = info.sim_const
 	data = info.sim_data
-	projects = data["projects"]
-	buildings = data["buildings"]
-	citizens = data["citizens"]
 
 	for i in range(simulated_days):
+		projects = data["projects"]
+		buildings = data["buildings"]
+		citizens = data["citizens"]
+		info.sim_data["complaints"] = []
 		data["day"]+=1
-		data["happiness"] = calcualte_happiness()
 		new_disaster = disaster()
-		if new_disaster: 
+		if new_disaster:
 			dis_info = new_disaster.activate()
 			print(f"{info.Colors.WARNING}Természeti katasztrófa történt: {new_disaster.name}, méret:{dis_info['size']}")
 			print(f"Érintett épületek száma: {len(dis_info['damaged_builds'])} ,kár mennyisége: {format_number(dis_info['repair_cost_M'])}{info.sim_const['currency_type']}")
 			damaged_buildings_desc = ", ".join(f"{Id}: {info.sim_data['buildings'][Id].name}" for Id in dis_info["damaged_builds"])
-			if choice_input("Megjavítod?", {"igen": {"return_value": True, "desc": damaged_buildings_desc}}): new_disaster.repair(dis_info)
+			if choice_input("Megjavítod?", {"igen": {"return_value": True, "desc": damaged_buildings_desc}}): 
+				new_disaster.repair(dis_info)
+				print(f"Megmaradt valuta: {format_number(info.sim_data["currency_M"])}")
 		#updating, citiznes, buildings
 		for Id,bld in buildings.items():
 			current_residents = [c for key,c in citizens.items() if c.houseID == Id]
 			free_space = (bld.area // info.sim_const["area_for_citizen"]) - len(current_residents)
-
 			for _ in range(free_space):
-				#make job (0.1% cahnce to be jobless), FINISH, spktrum age (0,80)
-				new_citizen = info.Citizen( _born=data["day"], _job="munkanélküli", _houseID=Id)
+				new_citizen = info.Citizen(_houseID=Id)
+				new_citizen.assign_job()
 				citizens.update({info.make_id(citizens): new_citizen})
 
-		for Id,proj in projects.items():
+		for Id,proj in projects.items(): #some reason citizens wont get added
 			if not proj.finished:
-				proj.check_done()
-
-	#tax
+				if proj.check_done(): #it will aslo automatically put the project into the right data dict
+					del projects[Id]
+		#tax
+		data["happiness"] = calculate_happiness()
 		total_tax = 0
 		for Id,c in citizens.items():
-			#if over 18 assign job, if over 6 assign, DOIT
-			if c.job and data["day"] - c.born > 18*365.25:
+			if c.job not in const["no_tax_jobs"]:
 				tax = const["tax_per_citizen"]*(data["happiness"]/const["max_happiness"])
 				data["currency_M"] += tax
 				total_tax += tax
 		
 		print(f"{info.Colors.OKCYAN}Day {i+1} simulated.{info.Colors.ENDC}")
 		print(f"{info.Colors.OKCYAN}	Adó bevétel: {total_tax}{info.sim_const["currency_type"]}{info.Colors.ENDC}")
-		print(f"{info.Colors.OKCYAN}	Panaszok: {len(info.sim_data["complaints"])}db{info.Colors.ENDC}")
+		print(f"{info.Colors.OKCYAN}	Panaszok száma: {len(info.sim_data["complaints"])}db{info.Colors.ENDC}")
 	show_reports()
 
 #end
