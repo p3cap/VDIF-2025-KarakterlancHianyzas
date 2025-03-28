@@ -77,7 +77,7 @@ def build():
 	if not new_building: return None
 	info.sim_data["projects"].update({info.make_id(info.sim_data["projects"]) :new_building})
 	info.sim_data["currency_M"] -= new_building.cost
-	print(f"Új projekt: {new_building.name},{new_building.type}",f"Befejezési idő: {new_building.finish_days} nap",sep="\n")
+	print(f"Új projekt: {new_building.name}",f"Típus: {new_building.type}",f"Befejezési idő: {new_building.finish_days} nap",sep="\n")
 	print(f"Megmaradt valuta: {format_number(info.sim_data['currency_M'])}")
 
 def upgrade_building():
