@@ -1,0 +1,9 @@
+[gd_resource type="LabelSettings" load_steps=2 format=3 uid="uid://cauv8wfe6rf4a"]
+
+[ext_resource type="FontFile" uid="uid://fx1fb2lo1821" path="res://Assets/other/Verdana-Bold.ttf" id="1_meq8n"]
+
+[resource]
+font = ExtResource("1_meq8n")
+font_size = 11
+font_color = Color(0, 0, 0, 1)
+outline_size = 2

@@ -1,0 +1,91 @@
+[gd_scene load_steps=13 format=3 uid="uid://cg5lgwiv3tyxy"]
+
+[ext_resource type="Script" uid="uid://dueximhotv1gw" path="res://scripts/map_builder.gd" id="1_21xkr"]
+[ext_resource type="Texture2D" uid="uid://c3gcod11f8x84" path="res://Assets/building_icons/lakóház.png" id="1_jjgbg"]
+[ext_resource type="Script" uid="uid://dkhuxrj5mks27" path="res://scripts/main.gd" id="1_ynf5e"]
+[ext_resource type="LabelSettings" uid="uid://caeajtl32av4t" path="res://Assets/premade_tres/normal_font.tres" id="2_8gbba"]
+[ext_resource type="PackedScene" uid="uid://d2soo2fwrigmr" path="res://Scenes/UserInterface.tscn" id="2_bo1nx"]
+[ext_resource type="Texture2D" uid="uid://bt7llpvequ1s0" path="res://Assets/upg_icons/upg_placeholder.png" id="3_jjvhh"]
+[ext_resource type="Script" uid="uid://devabaxcvw0o1" path="res://scripts/cam.gd" id="4_kry3j"]
+[ext_resource type="Script" uid="uid://b5bhkqwpnfevu" path="res://scripts/Global.gd" id="7_344ge"]
+[ext_resource type="Script" uid="uid://cxjt83kcrh0sb" path="res://scripts/Data.gd" id="8_ynf5e"]
+[ext_resource type="FontFile" uid="uid://fx1fb2lo1821" path="res://Assets/other/Verdana-Bold.ttf" id="10_hptm8"]
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_344ge"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_d1ilt"]
+font = ExtResource("10_hptm8")
+font_size = 60
+outline_size = 4
+outline_color = Color(0, 0, 0, 1)
+
+[node name="Main" type="Node2D"]
+script = ExtResource("1_ynf5e")
+
+[node name="Map" type="GridContainer" parent="."]
+offset_right = 5000.0
+offset_bottom = 5000.0
+columns = 5
+script = ExtResource("1_21xkr")
+
+[node name="UI_build_sample" type="TextureButton" parent="Map"]
+custom_minimum_size = Vector2(150, 150)
+layout_mode = 2
+toggle_mode = true
+texture_normal = ExtResource("1_jjgbg")
+texture_pressed = SubResource("CanvasTexture_344ge")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="build_name" type="Label" parent="Map/UI_build_sample"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -70.0
+grow_horizontal = 2
+grow_vertical = 0
+tooltip_text = "ID: 0"
+mouse_filter = 1
+text = "Sample Building"
+label_settings = ExtResource("2_8gbba")
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="upgrades" type="GridContainer" parent="Map/UI_build_sample"]
+clip_contents = true
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 88.0
+grow_horizontal = 2
+columns = 4
+
+[node name="UI_upg_sample" type="TextureRect" parent="Map/UI_build_sample/upgrades"]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+tooltip_text = "upg name"
+texture = ExtResource("3_jjvhh")
+expand_mode = 1
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(576, 324)
+script = ExtResource("4_kry3j")
+
+[node name="UserInterface" parent="." instance=ExtResource("2_bo1nx")]
+
+[node name="Global" type="Node" parent="."]
+script = ExtResource("7_344ge")
+
+[node name="Data" type="Node" parent="."]
+script = ExtResource("8_ynf5e")
+
+[node name="Label" type="Label" parent="."]
+offset_left = -32.0
+offset_top = -112.0
+offset_right = 408.0
+offset_bottom = -33.0
+text = "Álomváros"
+label_settings = SubResource("LabelSettings_d1ilt")

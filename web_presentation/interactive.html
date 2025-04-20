@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" charset="UTF-8">
+  <meta property="og:title" content="P3cap's website" />
+  <meta property="og:url" content="https://pttt-dev.hu/" />
+  <meta property="og:image" content="img/featured_img.jpg" />
+  <meta property="og:description" content="PTTT.DEV - Játlfejlesztő szakkör a BMSZC Puskás Tivadar I.T. technikumba." />
+
+  <link rel="stylesheet" href="css/bootstrap.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/p3cap.css">
+  <script src="js/script.js"></script>
+  <link rel="shortcut icon" href="img/pttt_icon.png">
+  <title>Álomváros</title>
+</head>
+
+<body>
+  <div id="sidebar" hidden class="bg-dark text-white position-fixed top-0 w-100 p-3">
+    <ul class="nav text-center">
+      <li class="nav-item">
+        <a class="nav-link text-white btn" href="#top">top</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link text-white btn" href="#about">About</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link text-white btn" href="#portfolio">Portfolio</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link text-white btn" href="#prosNcons">Pros and Cons</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link text-white btn" href="#experience">Studies/Experience</a>
+      </li>
+			<li class="w-50">
+				<h3>Álomváros</h3>
+			</li>
+    </ul>
+  </div>
+
+  <div id="content" class="ms-5">
+    <section id="top" class="d-flex justify-content-center align-items-center text-white" style="height: 100vh;">
+      <div class="text-center">
+        <h1 class="display-4 fw-bold">Álomváros - interaktív szimuláció</h1>
+        <p class="lead">Vadász Dénes Informatikai Verseny <b>&lt;Karakterlánc Hiányzás&gt;</b> csapata</p>
+        <div class="row justify-content-center">
+          <a class="m-4 reactive-s" target="_blank" href="index.html" title="index">
+            <img width="50" height="50" src="" alt="valami home button">
+						<p>Álomvárosról</p>
+          </a>
+          <a class="m-4 reactive-s" target="_blank" href="stats.html" title="stats">
+            <img width="50" height="50" src="" alt="statistikika logo">
+						<p>Álomvárosról</p>
+          </a>
+          <a class="m-4 reactive-s" target="_blank" href="interactive.html" title="interactive">
+            <img width="50" height="50" src="img/Godot_icon.png" alt="Godot logo">
+						<p>Godot UI</p>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <hr>
+
+    <h1 class="display-4 fw-bold text-white text-center p-5">-Interaktív Szimuláció-</h1>
+    <section id="about" class="text-white text-center">
+      <div class="container d-flex justify-content-center align-items-center">
+        <div class="row w-100">
+          <div class="col-12 col-md-10">
+            <h2>Title</h2>
+            <iframe src="export/index.html" frameborder="0" height="500" width="800"></iframe>
+          </div>
+          <div class="col-12 col-md-2">
+            <h2>Próbáld ki te is!</h2>
+            <img src="img/qr.png" width="340" height="450" alt="">
+            <br>
+          </div>
+					<div class="col-12">
+						<h2>-Technikai részletek-</h2>
+						<h3>Godot 4.4-be készült HTML5-ös exportálással készült interaktív szimuláció a Godot felhasználói felület és Python logika kombinálásával....</h3>
+					</div>
+        </div>
+      </div>
+    </section>
+
+
+  <!-- Footer -->
+  <footer class="container-fluid text-center bg-dark py-3">
+    <br>
+    <p>&copy; 2024-<span id="current_year">2025</span> PTTT-DEV. All Rights Reserved.</p>
+  </footer>
+</body>
+
+</html>
