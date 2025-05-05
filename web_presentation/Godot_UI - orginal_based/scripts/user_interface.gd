@@ -5,6 +5,7 @@ extends CanvasLayer
 func _ready():
 	for e in get_children():
 		var btn = e.find_child("close_button")
+		print(e)
 		if not btn: return
 		
 		btn.pressed.connect(func():
@@ -32,7 +33,7 @@ func warn(msg):
 func action(msg):
 	$Warning/msg.text = msg
 	$Warning/Anim.play("warn")
-	await $Warning/Accept.pressed or $Warning/Decline.pressed
+	
 
 func _process(delta):
 	$Values/currency.text = Global.format_number(Data.user_data["currency_M"])+" "+Data.sim_const["currency_type"]
