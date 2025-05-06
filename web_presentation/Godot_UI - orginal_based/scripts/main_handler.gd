@@ -25,14 +25,21 @@ func upg_building(building, upg):
 	Data.user_data["currency_M"] -=  upg.cost
 
 func random_disaster():
+	var user_data = Data.user_data
 	var chance = randi_range(0,1000)
 	if chance > 990:
 		var disaster = Data.disasters.pick_random()
-		var action = UI.warn("Természeti katasztrófa")
+		var damaged_builds = []
+		for bld in user_data["buildings"]:
+			if randi_range(1,5) == 5:
+				damaged_builds.append(bld)
+		var action = UI.action("Természeti katasztrófa: "+str(disaster.name),len(damaged_builds))
 		if action:
 			pass
 		else:
-			pass
+			for e in user_data["buildings"]:
+				if e in damaged_builds:
+					e.area = 0
 
 func simulate_days(days):
 	var user_data = Data.user_data
@@ -42,3 +49,10 @@ func simulate_days(days):
 			user_data["currncy_M"] += Data.sim_const["tax_payer_spektrum"][1]
 		
 		random_disaster()
+		
+	for bld in user_data["buildings"]:
+		bld.finish_days -= days
+		
+	$Map.load_map()
+		
+		

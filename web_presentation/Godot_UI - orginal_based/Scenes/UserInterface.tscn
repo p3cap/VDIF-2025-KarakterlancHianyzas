@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=3 uid="uid://d2soo2fwrigmr"]
+[gd_scene load_steps=34 format=3 uid="uid://d2soo2fwrigmr"]
 
 [ext_resource type="Script" uid="uid://blr11yc7ic3a1" path="res://scripts/user_interface.gd" id="1_ofew4"]
 [ext_resource type="Texture2D" uid="uid://c3gcod11f8x84" path="res://Assets/building_icons/lakóház.png" id="2_356oj"]
@@ -16,7 +16,9 @@
 [ext_resource type="StyleBox" uid="uid://dhjjcji0bv2vj" path="res://Assets/premade_tres/UI_aside_style.tres" id="13_456rr"]
 [ext_resource type="Texture2D" uid="uid://w4b1jpe8apuw" path="res://Assets/UI_icons/people.png" id="13_y20qt"]
 [ext_resource type="Texture2D" uid="uid://ccmmwy4vhxedm" path="res://Assets/UI_icons/day.png" id="14_456rr"]
+[ext_resource type="Texture2D" uid="uid://cr0hbwv7wyo7t" path="res://Assets/UI_icons/zoom.png" id="17_jh6ek"]
 [ext_resource type="StyleBox" uid="uid://c807qyd5iij8u" path="res://Assets/premade_tres/UI_sideInfo_style.tres" id="17_yjmfj"]
+[ext_resource type="Texture2D" uid="uid://ceyy0isys1v5e" path="res://Assets/UI_icons/zoom-out.png" id="18_c4v55"]
 [ext_resource type="FontFile" uid="uid://fx1fb2lo1821" path="res://Assets/other/Verdana-Bold.ttf" id="18_ruk67"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_k4eo3"]
@@ -38,7 +40,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(0, 504)]
+"values": [Vector2(0, 503)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -99,7 +101,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(-128, 0)]
+"values": [Vector2(0, 0)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -111,7 +113,7 @@ tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": ["<"]
+"values": [">"]
 }
 
 [sub_resource type="Animation" id="Animation_k4eo3"]
@@ -325,126 +327,12 @@ anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -144.0
+offset_top = -145.0
+offset_bottom = -1.0
 grow_horizontal = 2
 grow_vertical = 0
 theme_override_styles/panel = SubResource("StyleBoxFlat_k4eo3")
 script = ExtResource("2_c7bke")
-
-[node name="Build_menu" type="Panel" parent="Menu"]
-visible = false
-z_index = 2
-layout_mode = 1
-anchors_preset = 12
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 64.0
-offset_top = -144.0
-grow_horizontal = 2
-grow_vertical = 0
-theme_override_styles/panel = SubResource("StyleBoxFlat_k4eo3")
-
-[node name="Back" type="TextureButton" parent="Menu/Build_menu"]
-layout_mode = 0
-offset_left = -56.0
-offset_top = 8.0
-offset_right = -1.0
-offset_bottom = 136.0
-mouse_default_cursor_shape = 2
-texture_normal = ExtResource("4_bjgi8")
-ignore_texture_size = true
-stretch_mode = 5
-
-[node name="Scroll" type="ScrollContainer" parent="Menu/Build_menu"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 80.0
-offset_top = 8.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="Grid" type="GridContainer" parent="Menu/Build_menu/Scroll"]
-layout_mode = 2
-theme_override_constants/h_separation = 21
-theme_override_constants/v_separation = 40
-columns = 7
-
-[node name="UI_building_sample" type="TextureButton" parent="Menu/Build_menu/Scroll/Grid"]
-visible = false
-custom_minimum_size = Vector2(125, 125)
-layout_mode = 2
-mouse_filter = 1
-mouse_default_cursor_shape = 2
-texture_normal = ExtResource("2_356oj")
-ignore_texture_size = true
-stretch_mode = 0
-
-[node name="bld_name" type="Label" parent="Menu/Build_menu/Scroll/Grid/UI_building_sample"]
-layout_mode = 1
-anchors_preset = 12
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_top = -93.0
-offset_bottom = -53.0
-grow_horizontal = 2
-grow_vertical = 0
-text = "
-"
-label_settings = ExtResource("3_guah6")
-horizontal_alignment = 1
-vertical_alignment = 1
-autowrap_mode = 3
-
-[node name="cost" type="Label" parent="Menu/Build_menu/Scroll/Grid/UI_building_sample"]
-layout_mode = 1
-anchors_preset = 12
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_top = -53.0
-offset_bottom = -29.0
-grow_horizontal = 2
-grow_vertical = 0
-text = "M HUF"
-label_settings = ExtResource("3_guah6")
-horizontal_alignment = 1
-vertical_alignment = 1
-autowrap_mode = 3
-
-[node name="type" type="Label" parent="Menu/Build_menu/Scroll/Grid/UI_building_sample"]
-layout_mode = 1
-anchors_preset = 12
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_top = -125.0
-offset_bottom = -101.0
-grow_horizontal = 2
-grow_vertical = 0
-label_settings = ExtResource("3_guah6")
-horizontal_alignment = 1
-vertical_alignment = 1
-autowrap_mode = 3
-
-[node name="area" type="Label" parent="Menu/Build_menu/Scroll/Grid/UI_building_sample"]
-layout_mode = 1
-anchors_preset = 12
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_top = -29.0
-offset_bottom = -5.0
-grow_horizontal = 2
-grow_vertical = 0
-text = "m2"
-label_settings = ExtResource("3_guah6")
-horizontal_alignment = 1
-vertical_alignment = 1
-autowrap_mode = 3
 
 [node name="close_button" type="Button" parent="Menu"]
 layout_mode = 0
@@ -595,6 +483,121 @@ horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
 
+[node name="Build_menu" type="Panel" parent="Menu"]
+visible = false
+z_index = 2
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 64.0
+offset_top = -144.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_k4eo3")
+
+[node name="Back" type="TextureButton" parent="Menu/Build_menu"]
+layout_mode = 0
+offset_left = -56.0
+offset_top = 8.0
+offset_right = -1.0
+offset_bottom = 136.0
+mouse_default_cursor_shape = 2
+texture_normal = ExtResource("4_bjgi8")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="Scroll" type="ScrollContainer" parent="Menu/Build_menu"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 80.0
+offset_top = 8.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Grid" type="GridContainer" parent="Menu/Build_menu/Scroll"]
+layout_mode = 2
+theme_override_constants/h_separation = 21
+theme_override_constants/v_separation = 40
+columns = 7
+
+[node name="UI_building_sample" type="TextureButton" parent="Menu/Build_menu/Scroll/Grid"]
+visible = false
+custom_minimum_size = Vector2(125, 125)
+layout_mode = 2
+mouse_filter = 1
+mouse_default_cursor_shape = 2
+texture_normal = ExtResource("2_356oj")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="bld_name" type="Label" parent="Menu/Build_menu/Scroll/Grid/UI_building_sample"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -93.0
+offset_bottom = -53.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "
+"
+label_settings = ExtResource("3_guah6")
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="cost" type="Label" parent="Menu/Build_menu/Scroll/Grid/UI_building_sample"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -53.0
+offset_bottom = -29.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "M HUF"
+label_settings = ExtResource("3_guah6")
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="type" type="Label" parent="Menu/Build_menu/Scroll/Grid/UI_building_sample"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -125.0
+offset_bottom = -101.0
+grow_horizontal = 2
+grow_vertical = 0
+label_settings = ExtResource("3_guah6")
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="area" type="Label" parent="Menu/Build_menu/Scroll/Grid/UI_building_sample"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -29.0
+offset_bottom = -5.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "m2"
+label_settings = ExtResource("3_guah6")
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
 [node name="Report" type="Panel" parent="."]
 visible = false
 anchors_preset = 12
@@ -626,7 +629,7 @@ stretch_mode = 5
 [node name="Info" type="Panel" parent="."]
 anchors_preset = 9
 anchor_bottom = 1.0
-offset_left = -128.0
+offset_right = 128.0
 offset_bottom = -200.0
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_k4eo3")
@@ -668,7 +671,7 @@ theme_override_styles/normal_mirrored = SubResource("StyleBoxFlat_k4eo3")
 theme_override_styles/normal = SubResource("StyleBoxFlat_k4eo3")
 toggle_mode = true
 button_pressed = true
-text = "<"
+text = ">"
 
 [node name="bld_name" type="Label" parent="Info"]
 layout_mode = 1
@@ -746,7 +749,7 @@ offset_bottom = -288.0
 grow_horizontal = 2
 grow_vertical = 0
 theme_override_styles/normal = ExtResource("10_y20qt")
-text = "Terület:"
+text = "Lakosok:"
 label_settings = ExtResource("3_guah6")
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -978,6 +981,62 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_k4eo3")
 position = Vector2(88, 12)
 scale = Vector2(0.04, 0.04)
 texture = ExtResource("14_456rr")
+
+[node name="Cam" type="Panel" parent="."]
+self_modulate = Color(1, 1, 1, 0)
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -48.0
+offset_right = -15.0
+offset_bottom = -525.0
+grow_horizontal = 0
+grow_vertical = 2
+scale = Vector2(1.5, 1.5)
+theme_override_styles/panel = SubResource("StyleBoxFlat_ug47o")
+
+[node name="out" type="TextureButton" parent="Cam"]
+layout_mode = 0
+offset_left = -37.3333
+offset_top = 10.6667
+offset_right = -16.3333
+offset_bottom = 31.6667
+tooltip_text = "Építés"
+mouse_default_cursor_shape = 2
+texture_normal = ExtResource("17_jh6ek")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="in" type="TextureButton" parent="Cam"]
+layout_mode = 0
+offset_left = -10.6667
+offset_top = 10.6667
+offset_right = 10.3333
+offset_bottom = 31.6667
+tooltip_text = "Építés"
+mouse_default_cursor_shape = 2
+texture_normal = ExtResource("18_c4v55")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="zoom" type="Label" parent="Cam"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = -1.121
+anchor_top = 0.043
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -11.007
+offset_top = 31.711
+offset_right = -6.0
+offset_bottom = -27.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "100%"
+label_settings = ExtResource("3_guah6")
+horizontal_alignment = 1
+autowrap_mode = 3
 
 [node name="Warning" type="Panel" parent="."]
 visible = false

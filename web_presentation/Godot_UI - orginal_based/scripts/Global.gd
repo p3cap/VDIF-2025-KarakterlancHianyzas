@@ -1,6 +1,7 @@
 extends Node
 
 var selected = null
+var zoom = 100
 
 func format_number(amount):
 	for unit in ["M", "B", "T", "P", "E", "Z"]:

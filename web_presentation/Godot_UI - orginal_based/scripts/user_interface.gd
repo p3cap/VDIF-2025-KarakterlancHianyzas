@@ -3,18 +3,23 @@ extends CanvasLayer
 @onready var main = $".."
 
 func _ready():
+	$Cam/out.pressed.connect(func():
+		Global.zoom *= 1.1
+		)
+	$Cam/in.pressed.connect(func():
+		Global.zoom *= 0.9
+		)
+	
 	for e in get_children():
 		var btn = e.find_child("close_button")
-		print(e)
-		if not btn: return
-		
-		btn.pressed.connect(func():
-			var anim = e.find_child("Anim")
-			if btn.button_pressed and anim:
-				anim.play_backwards("close")
-			elif anim:
-				anim.play("close")
-			)
+		if btn:
+			btn.pressed.connect(func():
+				var anim = e.find_child("Anim")
+				if btn.button_pressed and anim:
+					anim.play_backwards("close")
+				elif anim:
+					anim.play("close")
+				)
 
 func toggle_info(close=true):
 	if $Info/close_button.button_pressed != close: return
@@ -40,6 +45,8 @@ func _process(delta):
 	$Values/happiness.text = str(Data.user_data["happiness"])+"%"
 	$Values/citizens.text = str(len(Data.user_data["citizens"]))
 	$Values/day.text = str(Data.user_data["day"])+"."
+	
+	$Cam/zoom.text = str(snapped(Global.zoom,0.1))+"%"
 	
 	if not Global.selected: return
 	$Info/bld_name.text = Global.selected.bld_name

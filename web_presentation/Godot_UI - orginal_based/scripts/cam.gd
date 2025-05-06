@@ -9,13 +9,15 @@ func _unhandled_input(event):
 			dragging = event.pressed
 			last_mouse_pos = get_viewport().get_mouse_position()
 
-		elif event.button_index == MOUSE_BUTTON_WHEEL_UP:
-			zoom *= 1.1
-		elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN and (zoom.x * 0.9) > 0:
-			zoom *= 0.9
-
 	elif event is InputEventMouseMotion and dragging:
 		var current_mouse_pos = get_viewport().get_mouse_position()
 		var delta = last_mouse_pos - current_mouse_pos
 		position += delta/zoom.y
 		last_mouse_pos = current_mouse_pos
+
+func _process(delta):
+	zoom = Vector2(Global.zoom/100,Global.zoom/100)
+	if Input.is_action_just_pressed("zoom_in"):
+		Global.zoom *= 1.1
+	elif Input.is_action_just_pressed("zoom_out"):
+		Global.zoom *= 0.9
