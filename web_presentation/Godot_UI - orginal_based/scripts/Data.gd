@@ -20,7 +20,7 @@ var default_data = {
 		13: Building.new("Bem József utca 30", 60, 150, 1, 98, "lakóház", [], 200),
 		14: Building.new("Vörösmarty Mihály út 62", 60, 150, 1, 98, "lakóház", [], 200),
 	},
-	"citizens": {},
+	"citizens": 0,
 	"projects": {},
 	"complaints": [],
 	"start_year": 2025,

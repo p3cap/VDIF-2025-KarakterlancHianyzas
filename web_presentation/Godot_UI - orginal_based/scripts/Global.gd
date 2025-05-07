@@ -1,5 +1,7 @@
 extends Node
 
+signal disaster
+
 var selected = null
 var zoom = 100
 

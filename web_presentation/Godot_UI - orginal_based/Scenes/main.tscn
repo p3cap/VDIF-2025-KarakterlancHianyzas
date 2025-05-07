@@ -33,6 +33,7 @@ script = ExtResource("1_21xkr")
 visible = false
 custom_minimum_size = Vector2(150, 150)
 layout_mode = 2
+mouse_default_cursor_shape = 2
 toggle_mode = true
 texture_normal = ExtResource("3_d1ilt")
 ignore_texture_size = true

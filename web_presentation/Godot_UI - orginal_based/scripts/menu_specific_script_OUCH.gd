@@ -25,7 +25,7 @@ func _ready():
 			if bld.get(e.name):
 				e.text = str(bld.get(e.name))+e.text
 		new_sample.pressed.connect(func(): 
-			main.build(bld)			
+			main.build(bld)
 			)
 		new_sample.visible = true
 		grid.add_child(new_sample)

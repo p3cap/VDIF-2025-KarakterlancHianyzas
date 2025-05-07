@@ -1,4 +1,4 @@
-[gd_scene load_steps=34 format=3 uid="uid://d2soo2fwrigmr"]
+[gd_scene load_steps=36 format=3 uid="uid://d2soo2fwrigmr"]
 
 [ext_resource type="Script" uid="uid://blr11yc7ic3a1" path="res://scripts/user_interface.gd" id="1_ofew4"]
 [ext_resource type="Texture2D" uid="uid://c3gcod11f8x84" path="res://Assets/building_icons/lakóház.png" id="2_356oj"]
@@ -17,7 +17,6 @@
 [ext_resource type="Texture2D" uid="uid://w4b1jpe8apuw" path="res://Assets/UI_icons/people.png" id="13_y20qt"]
 [ext_resource type="Texture2D" uid="uid://ccmmwy4vhxedm" path="res://Assets/UI_icons/day.png" id="14_456rr"]
 [ext_resource type="Texture2D" uid="uid://cr0hbwv7wyo7t" path="res://Assets/UI_icons/zoom.png" id="17_jh6ek"]
-[ext_resource type="StyleBox" uid="uid://c807qyd5iij8u" path="res://Assets/premade_tres/UI_sideInfo_style.tres" id="17_yjmfj"]
 [ext_resource type="Texture2D" uid="uid://ceyy0isys1v5e" path="res://Assets/UI_icons/zoom-out.png" id="18_c4v55"]
 [ext_resource type="FontFile" uid="uid://fx1fb2lo1821" path="res://Assets/other/Verdana-Bold.ttf" id="18_ruk67"]
 
@@ -152,11 +151,27 @@ _data = {
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ug47o"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jh6ek"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ruk67"]
+bg_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
 [sub_resource type="LabelSettings" id="LabelSettings_jh6ek"]
 font = ExtResource("18_ruk67")
 font_size = 32
 font_color = Color(1, 0, 0, 1)
 outline_size = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_c4v55"]
+bg_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
 
 [sub_resource type="Animation" id="Animation_ruk67"]
 length = 0.001
@@ -208,6 +223,30 @@ tracks/3/keys = {
 "update": 1,
 "values": [false]
 }
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("BG:color")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0, 0, 0, 0.54902)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("BG:visible")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
 
 [sub_resource type="Animation" id="Animation_jh6ek"]
 resource_name = "event"
@@ -255,6 +294,30 @@ tracks/3/path = NodePath(".:visible")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.0333333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("BG:color")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 7.72749),
+"update": 0,
+"values": [Color(0, 0, 0, 0), Color(0, 0, 0, 0.54902)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("BG:visible")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
 "times": PackedFloat32Array(0, 0.0333333),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
@@ -435,7 +498,7 @@ offset_left = 856.0
 offset_top = 8.0
 offset_right = 968.0
 offset_bottom = 120.0
-tooltip_text = "Építés"
+tooltip_text = "1 nap szimulálása"
 mouse_default_cursor_shape = 2
 texture_normal = ExtResource("4_ug47o")
 ignore_texture_size = true
@@ -462,7 +525,7 @@ offset_left = 960.0
 offset_top = 8.0
 offset_right = 1072.0
 offset_bottom = 120.0
-tooltip_text = "Építés"
+tooltip_text = "10 nap szimulálása"
 mouse_default_cursor_shape = 2
 texture_normal = ExtResource("4_ug47o")
 ignore_texture_size = true
@@ -567,21 +630,6 @@ horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
 
-[node name="type" type="Label" parent="Menu/Build_menu/Scroll/Grid/UI_building_sample"]
-layout_mode = 1
-anchors_preset = 12
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_top = -125.0
-offset_bottom = -101.0
-grow_horizontal = 2
-grow_vertical = 0
-label_settings = ExtResource("3_guah6")
-horizontal_alignment = 1
-vertical_alignment = 1
-autowrap_mode = 3
-
 [node name="area" type="Label" parent="Menu/Build_menu/Scroll/Grid/UI_building_sample"]
 layout_mode = 1
 anchors_preset = 12
@@ -604,8 +652,8 @@ anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -144.0
-offset_bottom = 328.0
+offset_top = -145.0
+offset_bottom = 327.0
 grow_horizontal = 2
 grow_vertical = 0
 theme_override_styles/panel = SubResource("StyleBoxFlat_k4eo3")
@@ -848,7 +896,7 @@ anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -368.0
 offset_right = 144.0
-offset_bottom = 64.0
+offset_bottom = 27.0
 grow_horizontal = 2
 scale = Vector2(1.5, 1.5)
 theme_override_styles/panel = SubResource("StyleBoxFlat_ug47o")
@@ -859,9 +907,9 @@ anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -64.0
+offset_top = -27.0
 offset_right = -368.0
-offset_bottom = -40.0
+offset_bottom = -3.0
 grow_horizontal = 2
 grow_vertical = 0
 text = "100M HUF"
@@ -887,9 +935,9 @@ anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 152.0
-offset_top = -64.0
+offset_top = -27.0
 offset_right = -285.0
-offset_bottom = -40.0
+offset_bottom = -3.0
 grow_horizontal = 2
 grow_vertical = 0
 text = "100% "
@@ -921,9 +969,9 @@ anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 264.0
-offset_top = -64.0
+offset_top = -27.0
 offset_right = -168.0
-offset_bottom = -40.0
+offset_bottom = -3.0
 grow_horizontal = 2
 grow_vertical = 0
 text = "100K"
@@ -955,9 +1003,9 @@ anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 384.0
-offset_top = -64.0
+offset_top = -27.0
 offset_right = -56.0
-offset_bottom = -40.0
+offset_bottom = -3.0
 grow_horizontal = 2
 grow_vertical = 0
 text = "400."
@@ -998,11 +1046,11 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_ug47o")
 
 [node name="out" type="TextureButton" parent="Cam"]
 layout_mode = 0
-offset_left = -37.3333
-offset_top = 10.6667
-offset_right = -16.3333
-offset_bottom = 31.6667
-tooltip_text = "Építés"
+offset_left = -37.0
+offset_top = 11.0
+offset_right = -16.0
+offset_bottom = 32.0
+tooltip_text = "Zoom in"
 mouse_default_cursor_shape = 2
 texture_normal = ExtResource("17_jh6ek")
 ignore_texture_size = true
@@ -1014,7 +1062,7 @@ offset_left = -10.6667
 offset_top = 10.6667
 offset_right = 10.3333
 offset_bottom = 31.6667
-tooltip_text = "Építés"
+tooltip_text = "Zoom out"
 mouse_default_cursor_shape = 2
 texture_normal = ExtResource("18_c4v55")
 ignore_texture_size = true
@@ -1051,7 +1099,15 @@ offset_right = 144.0
 offset_bottom = 288.0
 grow_horizontal = 2
 scale = Vector2(1.5, 1.5)
-theme_override_styles/panel = SubResource("StyleBoxFlat_ug47o")
+theme_override_styles/panel = SubResource("StyleBoxFlat_jh6ek")
+
+[node name="BG" type="ColorRect" parent="Warning"]
+layout_mode = 0
+offset_left = -245.0
+offset_top = -187.0
+offset_right = 693.0
+offset_bottom = 373.0
+color = Color(0, 0, 0, 0.54902)
 
 [node name="msg" type="Label" parent="Warning"]
 layout_mode = 1
@@ -1060,7 +1116,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/normal = ExtResource("17_yjmfj")
+theme_override_styles/normal = SubResource("StyleBoxFlat_ruk67")
 text = "WARNING!"
 label_settings = SubResource("LabelSettings_jh6ek")
 horizontal_alignment = 1
@@ -1082,7 +1138,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("18_ruk67")
-theme_override_styles/normal = ExtResource("17_yjmfj")
+theme_override_styles/normal = SubResource("StyleBoxFlat_c4v55")
 text = "Elfogad"
 autowrap_mode = 3
 
@@ -1101,7 +1157,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("18_ruk67")
-theme_override_styles/normal = ExtResource("17_yjmfj")
+theme_override_styles/normal = SubResource("StyleBoxFlat_c4v55")
 text = "Elutasít"
 autowrap_mode = 3
 

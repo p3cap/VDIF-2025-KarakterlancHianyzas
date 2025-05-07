@@ -26,32 +26,40 @@ func upg_building(building, upg):
 
 func random_disaster():
 	var user_data = Data.user_data
-	var chance = randi_range(0,1000)
-	if chance > 990:
+	var chance = randi_range(0,100)
+	if chance > 98:
 		var disaster = Data.disasters.pick_random()
 		var damaged_builds = []
 		for bld in user_data["buildings"]:
 			if randi_range(1,5) == 5:
 				damaged_builds.append(bld)
-		var action = UI.action("Természeti katasztrófa: "+str(disaster.name),len(damaged_builds))
+		UI.action("Természeti katasztrófa: "+str(disaster.dst_name)+". Javási költség: "+Global.format_number(len(damaged_builds)*1000))
+		var action = await Global.disaster
 		if action:
-			pass
+			user_data["currency_M"] -= len(damaged_builds)*1000
 		else:
 			for e in user_data["buildings"]:
 				if e in damaged_builds:
-					e.area = 0
+					user_data["buildings"][e].finish_days += 200
 
 func simulate_days(days):
 	var user_data = Data.user_data
 	for e in days:
 		user_data["day"] += 1
-		for citizen in user_data["citizens"]:
-			user_data["currncy_M"] += Data.sim_const["tax_payer_spektrum"][1]
+		var tax = snapped(Data.sim_const["tax_payer_spektrum"][1]*(user_data["happiness"]/100),0.1)
+		if user_data["happiness"] < 30:
+			tax = -100
+		for citizen in range(user_data["citizens"]):
+			user_data["currency_M"] += tax
 		
 		random_disaster()
 		
-	for bld in user_data["buildings"]:
-		bld.finish_days -= days
+		user_data["citizens"] = 0
+		for bld_ID in user_data["buildings"]:
+			user_data["buildings"][bld_ID].finish_days -= 1
+			if user_data["buildings"][bld_ID].finish_days <= 0:
+				for i in range(user_data["buildings"][bld_ID].area/30):
+					user_data["citizens"] += 1
 		
 	$Map.load_map()
 		

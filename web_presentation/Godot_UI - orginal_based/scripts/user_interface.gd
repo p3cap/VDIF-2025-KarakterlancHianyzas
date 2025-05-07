@@ -3,6 +3,12 @@ extends CanvasLayer
 @onready var main = $".."
 
 func _ready():
+	$Warning/Accept.pressed.connect(func():
+		Global.disaster.emit(true)
+		)
+	$Warning/Decline.pressed.connect(func():
+		Global.disaster.emit(false)
+		)
 	$Cam/out.pressed.connect(func():
 		Global.zoom *= 1.1
 		)
@@ -21,29 +27,22 @@ func _ready():
 					anim.play("close")
 				)
 
-func toggle_info(close=true):
-	if $Info/close_button.button_pressed != close: return
-	match close:
-		true:
-			$Info/Anim.play("close")
-			$Info/close_button.button_pressed = false
-		false:
-			$Info/Anim.play_backwards("close")
-			$Info/close_button.button_pressed = true
-
 func warn(msg):
 	$Warning/msg.text = msg
 	$Warning/Anim.play("warn")
 
 func action(msg):
 	$Warning/msg.text = msg
-	$Warning/Anim.play("warn")
+	$Warning/Anim.play("event")
+	await Global.disaster
+	$Warning/Anim.play_backwards("event")
+	
 	
 
 func _process(delta):
 	$Values/currency.text = Global.format_number(Data.user_data["currency_M"])+" "+Data.sim_const["currency_type"]
 	$Values/happiness.text = str(Data.user_data["happiness"])+"%"
-	$Values/citizens.text = str(len(Data.user_data["citizens"]))
+	$Values/citizens.text = str(Data.user_data["citizens"])
 	$Values/day.text = str(Data.user_data["day"])+"."
 	
 	$Cam/zoom.text = str(snapped(Global.zoom,0.1))+"%"
