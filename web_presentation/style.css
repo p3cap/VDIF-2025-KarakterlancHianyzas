@@ -47,7 +47,7 @@ body {
     background: transparent;
 }
 .hero {
-    height: 60vh;
+    height: 50vh;
     background: linear-gradient(to right, #1f2736, #2e3548); 
     color: #ffffff;
 }
@@ -60,22 +60,24 @@ body {
     font-weight: 700;
 }
 .hero-text p {
-    font-size: 1.25rem;
+    font-size: 1.7rem;
     color: #cccccc;
 }
-
-.btn-primary {
-    background-color: #0081a8;
-    border: none;
-    color: white;
-    font-weight: 600;
-    transition: background-color 0.3s ease;
+.hero-text h2 {
+    font-family: 'Pijamas';
+    src: url(PIJAMAS_.ttf) format('truetype');
+    font-size: 70px;
+    font-weight: 200;
+    
 }
 
-.btn-primary:hover {
-    background-color: #00a8e0;
-    color: #fff;
-}
+@font-face {
+    font-family: 'Pijamas';
+    src: url('PIJAMAS_.ttf') format('truetype');
+  }
+  
+
+
 
 .card {
     background-color: #1d1f2b;
@@ -90,6 +92,7 @@ body {
     transform: translateY(-6px);
     box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
 }
+
 
 .card h4 a {
     color: white;
