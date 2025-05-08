@@ -2,128 +2,47 @@
 <html lang="hu">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>&lt;karakterlánc hiányzás&gt;</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Sniglet&display=swap" rel="stylesheet">
-    <link rel="icon" href="img/mini_logo.png" type="image/png">
-    <link rel="stylesheet" href="style.css">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>&lt;karakterlánc hiányzás&gt;</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Sniglet&display=swap" rel="stylesheet">
+	<link rel="icon" href="img/mini_logo.png" type="image/png">
+	<link rel="stylesheet" href="style.css">
+	<style>
+		body {
+			opacity: 0;
+			transition: opacity 0.5s ease;
+		}
+		body.loaded {
+			opacity: 1;
+		}
+	</style>
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark shadow-sm sticky-top">
-        <div class="container">
-            <a class="navbar-brand" href="index.html">&lt;karakterlánc hiányzás&gt;</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item"><a class="nav-link" href="epuletek.html">Épületek</a></li>
-                    <li class="nav-item"><a class="nav-link" href="lakosok.html">Lakosok</a></li>
-                    <li class="nav-item"><a class="nav-link" href="szolgaltatasok.html">Szolgáltatások</a></li>
-                    <li class="nav-item"><a class="nav-link" href="fejlesztesek.html">Fejlesztések</a></li>
-                    <li class="nav-item"><a class="nav-link" href="interaktiv.html">Interaktív</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-    <header class="hero text-center text-white d-flex align-items-center justify-content-center">
-        <canvas id="backgroundCanvas"></canvas>
-        <div class="hero-text">
-            <h1 class="animate-fade-in">Üdv</h1>
-            <p class="lead animate-fade-in delay-1">A BMSZC Puskás Tivadar Távközlési és Informatikai Technikum képviseletében,</p>
-            <p class="lead animate-fade-in delay-2">a &ltkarakterlánc hiányzás&gt csapata bemutatja:</p>
-            <h2 class="animate-fade-in delay-3">STRING CITY</h2>
-            <a href="interaktiv.html" class="btn btn-primary btn-lg mt-3 animate-fade-in delay-4">Interaktív bemutató</a>
-        </div>
+	<nav class="d-flex justify-content-center align-items-center" style="height: 100vh;">
+		<div class="container text-center">
+			<a id="fadeLink" class="navbar-brand" href="home.html">&lt;karakterlánc hiányzás&gt;</a>
+		</div>
+	</nav>
 
-        <script>
-            const canvas = document.getElementById("backgroundCanvas");
-            const ctx = canvas.getContext("2d");
-        
-                function resizeCanvas() {
-                    const displayWidth = window.innerWidth;
-                    const displayHeight = window.innerHeight;
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+	<script>
+		// Fade in on load
+		window.addEventListener('DOMContentLoaded', () => {
+			document.body.classList.add('loaded');
+		});
 
-                    canvas.style.width = displayWidth + 'px';
-                    canvas.style.height = displayHeight + 'px';
-
-                    canvas.width = displayWidth;
-                    canvas.height = displayHeight;
-                }
-
-        
-            window.addEventListener("resize", resizeCanvas);
-            resizeCanvas();
-        
-            const circles = [];
-            for (let i = 0; i < 40; i++) {
-              circles.push({
-                x: Math.random() * canvas.width,
-                y: Math.random() * canvas.height,
-                r: Math.random() * 20 + 10,
-                dx: (Math.random() - 0.5) * 1.2,
-                dy: (Math.random() - 0.5) * 1.2,
-                color: `rgba(255, 255, 255, ${Math.random() * 0.2 + 0.1})`
-              });
-            }
-        
-            function animate() {
-              ctx.clearRect(0, 0, canvas.width, canvas.height);
-        
-              for (let c of circles) {
-                ctx.beginPath();
-                ctx.arc(c.x, c.y, c.r, 0, Math.PI * 2);
-                ctx.fillStyle = c.color;
-                ctx.fill();
-        
-                c.x += c.dx;
-                c.y += c.dy;
-        
-                if (c.x < 0 || c.x > canvas.width) c.dx *= -1;
-                if (c.y < 0 || c.y > canvas.height) c.dy *= -1;
-              }
-        
-              requestAnimationFrame(animate);
-            }
-        
-            animate();
-          </script>
-    </header>
-    <section id="services" class="py-5">
-        <div class="custom-div container">
-            <h2 class="text-center mb-4">Induló adatok</h2>
-            <div class="row">
-                <div class="col-md-4 text-center">
-                    <div class="card p-3 shadow-sm animate-fade-in">
-                        <h4><a href="epuletek.html">Épületek</a></h4>
-                        <p>6 épülettípus - 15 helyszín</p>
-                    </div>
-                </div>
-                <div class="col-md-4 text-center">
-                    <div class="card p-3 shadow-sm animate-fade-in delay-1">
-                        <h4><a href="lakosok.html">Lakosok</a></h4>
-                        <p>30 lakos - lakóhely - életkor</p>
-                    </div>
-                </div>
-                <div class="col-md-4 text-center">
-                    <div class="card p-3 shadow-sm animate-fade-in delay-2">
-                        <h4><a href="szolgaltatások.html">Szolgáltatások</a></h4>
-                        <p>11 szolgáltatás</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <footer class="custom-footer bg-dark text-white text-center py-4">
-        <p class="mb-0">© 2025 &lt;karakterlánc hiányzás&gt;. Minden jog fenntartva.</p>
-    </footer>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-
+		// Fade out on link click
+		document.getElementById('fadeLink').addEventListener('click', function (e) {
+			e.preventDefault();
+			document.body.classList.remove('loaded');
+			setTimeout(() => {
+				window.location.href = this.href;
+			}, 500);
+		});
+	</script>
 </body>
 
 </html>
