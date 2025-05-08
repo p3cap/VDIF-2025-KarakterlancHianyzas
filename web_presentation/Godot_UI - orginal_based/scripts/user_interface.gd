@@ -50,7 +50,9 @@ func _process(delta):
 	if not Global.selected: return
 	$Info/bld_name.text = Global.selected.bld_name
 	$Info/_type.text = Global.selected.type
-	$Info/area.text = str(Global.selected.area)
+	$Info/area.text = str(Global.selected.area)+"m2"
+	$Info/people.text = str(snapped(Global.selected.area/30,1))
+	$Info/quality.text = str(Global.selected.quality)+"/5"
 	
 	var upg_continer = $Info/Scroll/Grid
 	var upg_sample = $Info/Scroll/Grid/UI_building_sample

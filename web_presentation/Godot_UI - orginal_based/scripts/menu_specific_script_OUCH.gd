@@ -5,6 +5,10 @@ extends Panel
 
 
 func _ready():
+	$Report_menu/Back.pressed.connect(func():
+		$Report_menu.visible = false)
+	$Report.pressed.connect(func():
+		$Report_menu.visible = true)
 	$Build.pressed.connect(func():
 		$Build_menu.visible = true)
 	$Build_menu/Back.pressed.connect(func():
@@ -29,3 +33,18 @@ func _ready():
 			)
 		new_sample.visible = true
 		grid.add_child(new_sample)
+
+func _process(delta):
+	var user_data = Data.user_data
+	$Report_menu/builds.text = str(len(user_data["buildings"]))+"db"
+	
+	$Report_menu/complaints.text = str(len(user_data["complaints"]))+"db"
+	for e in $Report_menu/Scroll/Grid.get_children():
+		if e != $Report_menu/Scroll/Grid/sample: e.queue_free()
+
+	for comp in user_data["complaints"]:
+		var new = $Report_menu/Scroll/Grid/sample.duplicate()
+		new.name = comp["desc"]
+		new.text = comp["desc"]
+		new.visible = true
+		$Report_menu/Scroll/Grid.add_child(new)

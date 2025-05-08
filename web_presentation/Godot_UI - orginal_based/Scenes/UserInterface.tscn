@@ -646,6 +646,193 @@ horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
 
+[node name="Report_menu" type="Panel" parent="Menu"]
+visible = false
+z_index = 2
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 64.0
+offset_top = -144.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_k4eo3")
+
+[node name="Back" type="TextureButton" parent="Menu/Report_menu"]
+layout_mode = 0
+offset_left = -56.0
+offset_top = 8.0
+offset_right = -1.0
+offset_bottom = 136.0
+mouse_default_cursor_shape = 2
+texture_normal = ExtResource("4_bjgi8")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="Scroll" type="ScrollContainer" parent="Menu/Report_menu"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 624.0
+offset_top = 17.0
+offset_right = -56.0
+offset_bottom = -7.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = ExtResource("13_456rr")
+
+[node name="Grid" type="GridContainer" parent="Menu/Report_menu/Scroll"]
+layout_mode = 2
+
+[node name="sample" type="Label" parent="Menu/Report_menu/Scroll/Grid"]
+visible = false
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+text = "Nincs bolt szolgáltatás!"
+label_settings = ExtResource("3_guah6")
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="label" type="Label" parent="Menu/Report_menu"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 64.0
+offset_top = -135.0
+offset_right = -896.0
+offset_bottom = -90.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "Adó bevétel:"
+label_settings = ExtResource("10_456rr")
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="label3" type="Label" parent="Menu/Report_menu"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 64.0
+offset_top = -95.0
+offset_right = -896.0
+offset_bottom = -58.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "Épületek:"
+label_settings = ExtResource("10_456rr")
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="label4" type="Label" parent="Menu/Report_menu"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 64.0
+offset_top = -55.0
+offset_right = -896.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "Boldogság:"
+label_settings = ExtResource("10_456rr")
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="tax" type="Label" parent="Menu/Report_menu"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 184.0
+offset_top = -135.0
+offset_right = -776.0
+offset_bottom = -90.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "0"
+label_settings = ExtResource("10_456rr")
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="builds" type="Label" parent="Menu/Report_menu"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 184.0
+offset_top = -95.0
+offset_right = -776.0
+offset_bottom = -58.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "0"
+label_settings = ExtResource("10_456rr")
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="happy" type="Label" parent="Menu/Report_menu"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 184.0
+offset_top = -55.0
+offset_right = -776.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "0"
+label_settings = ExtResource("10_456rr")
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="label2" type="Label" parent="Menu/Report_menu"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 520.0
+offset_top = -135.0
+offset_right = -464.0
+offset_bottom = -103.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "Panaszok:"
+label_settings = ExtResource("10_456rr")
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="complaints" type="Label" parent="Menu/Report_menu"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 520.0
+offset_top = -103.0
+offset_right = -480.0
+offset_bottom = -71.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "1db"
+label_settings = ExtResource("10_456rr")
+horizontal_alignment = 2
+vertical_alignment = 1
+autowrap_mode = 3
+
 [node name="Report" type="Panel" parent="."]
 visible = false
 anchors_preset = 12
@@ -743,12 +930,12 @@ anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -344.0
-offset_bottom = -320.0
+offset_top = -335.0
+offset_bottom = -280.0
 grow_horizontal = 2
 grow_vertical = 0
 text = "N/A"
-label_settings = ExtResource("10_l30ei")
+label_settings = ExtResource("3_guah6")
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
@@ -759,8 +946,8 @@ anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -368.0
-offset_bottom = -344.0
+offset_top = -360.0
+offset_bottom = -335.0
 grow_horizontal = 2
 grow_vertical = 0
 theme_override_styles/normal = ExtResource("10_y20qt")
@@ -776,12 +963,12 @@ anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -288.0
-offset_bottom = -264.0
+offset_top = -255.0
+offset_bottom = -200.0
 grow_horizontal = 2
 grow_vertical = 0
-text = "N/A m2"
-label_settings = ExtResource("10_l30ei")
+text = "N/A"
+label_settings = ExtResource("3_guah6")
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
@@ -792,8 +979,41 @@ anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -312.0
-offset_bottom = -288.0
+offset_top = -280.0
+offset_bottom = -255.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/normal = ExtResource("10_y20qt")
+text = "Terület:"
+label_settings = ExtResource("3_guah6")
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="people" type="Label" parent="Info"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -175.0
+offset_bottom = -112.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "N/A"
+label_settings = ExtResource("3_guah6")
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="Label6" type="Label" parent="Info"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -200.0
+offset_bottom = -175.0
 grow_horizontal = 2
 grow_vertical = 0
 theme_override_styles/normal = ExtResource("10_y20qt")
@@ -803,7 +1023,41 @@ horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
 
+[node name="quality" type="Label" parent="Info"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -87.0
+offset_bottom = -32.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "N/A"
+label_settings = ExtResource("3_guah6")
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="Label7" type="Label" parent="Info"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -112.0
+offset_bottom = -87.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/normal = ExtResource("10_y20qt")
+text = "Minőség:"
+label_settings = ExtResource("3_guah6")
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
 [node name="Label5" type="Label" parent="Info"]
+visible = false
 layout_mode = 1
 anchors_preset = 12
 anchor_top = 1.0
@@ -821,6 +1075,7 @@ vertical_alignment = 1
 autowrap_mode = 3
 
 [node name="Scroll" type="ScrollContainer" parent="Info"]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -1102,6 +1357,7 @@ scale = Vector2(1.5, 1.5)
 theme_override_styles/panel = SubResource("StyleBoxFlat_jh6ek")
 
 [node name="BG" type="ColorRect" parent="Warning"]
+z_index = 10
 layout_mode = 0
 offset_left = -245.0
 offset_top = -187.0
@@ -1110,6 +1366,7 @@ offset_bottom = 373.0
 color = Color(0, 0, 0, 0.54902)
 
 [node name="msg" type="Label" parent="Warning"]
+z_index = 100
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -1126,6 +1383,7 @@ autowrap_mode = 3
 [node name="Accept" type="Button" parent="Warning"]
 visible = false
 modulate = Color(0.823529, 1, 0.698039, 1)
+z_index = 100
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -1145,6 +1403,7 @@ autowrap_mode = 3
 [node name="Decline" type="Button" parent="Warning"]
 visible = false
 modulate = Color(1, 0.72473, 0.706106, 1)
+z_index = 100
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
