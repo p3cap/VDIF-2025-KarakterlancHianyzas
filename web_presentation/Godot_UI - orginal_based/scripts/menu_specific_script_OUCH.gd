@@ -16,7 +16,7 @@ func _ready():
 	$Simulate_1.pressed.connect(func():
 		main.simulate_days(1))
 	$Simulate_10.pressed.connect(func():
-		main.simulate_days(10))
+		main.simulate_days(5))
 	
 	for bld in Data.buildings:
 		var new_sample = $Build_menu/Scroll/Grid/UI_building_sample.duplicate()

@@ -31,7 +31,7 @@ func upg_building(building, upg):
 
 func calculate_happiness() -> float:
 	if Data.user_data["citizens"] <= 0:
-		return 100.0
+		return 0
 
 	var c = Data.sim_const
 	var reqs = c["service_requirements"]
@@ -67,15 +67,15 @@ func random_disaster():
 		for bld in user_data["buildings"]:
 			if randi_range(1,2) == 2:
 				damaged_builds.append(bld)
-		var fix_cost = Global.format_number(len(damaged_builds)*100)
-		UI.action("Természeti katasztrófa: "+str(disaster.dst_name),"Javítás: "+fix_cost,str(len(damaged_builds))+"db épület újraépítése")
+		if len(damaged_builds) <= 0: return
+		var fix_cost = Global.format_number(len(damaged_builds)*80)
+		UI.action("Természeti katasztrófa: "+str(disaster.dst_name)+". Sérült épületek: "+str(len(damaged_builds)),"Instant javítás: "+fix_cost,"100 napos javítás")
 		var action = await Global.disaster
 		if action:
-			user_data["currency_M"] -= len(damaged_builds)*100
+			user_data["currency_M"] -= len(damaged_builds)*80
 		else:
-			for e in user_data["buildings"]:
-				if e in damaged_builds:
-					user_data["buildings"][e].finish_days += 100
+			for e in damaged_builds:
+				user_data["buildings"][e].finish_days += 100
 			$Map.load_map()
 
 func simulate_days(days):
@@ -86,7 +86,7 @@ func simulate_days(days):
 		user_data["happiness"] = calculate_happiness()
 		var tax = snapped(0.05*(user_data["happiness"]/100),0.01)
 		if user_data["happiness"] < 30:
-			tax = -0.01
+			tax = -(30-user_data["happiness"])
 		for citizen in range(user_data["citizens"]):
 			user_data["currency_M"] += tax
 		
@@ -94,7 +94,8 @@ func simulate_days(days):
 		
 		user_data["citizens"] = 0
 		for bld_ID in user_data["buildings"]:
-			user_data["buildings"][bld_ID].finish_days -= 1
+			if user_data["buildings"][bld_ID].finish_days > 0:
+				user_data["buildings"][bld_ID].finish_days -= 1
 			if user_data["buildings"][bld_ID].finish_days <= 0 and user_data["buildings"][bld_ID].type == "lakóház":
 				for i in range(user_data["buildings"][bld_ID].area/30):
 					user_data["citizens"] += 1
