@@ -1,4 +1,4 @@
-[gd_scene load_steps=36 format=3 uid="uid://d2soo2fwrigmr"]
+[gd_scene load_steps=38 format=3 uid="uid://d2soo2fwrigmr"]
 
 [ext_resource type="Script" uid="uid://blr11yc7ic3a1" path="res://scripts/user_interface.gd" id="1_ofew4"]
 [ext_resource type="Texture2D" uid="uid://c3gcod11f8x84" path="res://Assets/building_icons/lakóház.png" id="2_356oj"]
@@ -9,13 +9,15 @@
 [ext_resource type="Texture2D" uid="uid://dsk8alnqji7ng" path="res://Assets/UI_icons/simulate.png" id="4_ug47o"]
 [ext_resource type="Texture2D" uid="uid://bt7llpvequ1s0" path="res://Assets/upg_icons/upg_placeholder.png" id="7_356oj"]
 [ext_resource type="Texture2D" uid="uid://bq73dcjsow6gt" path="res://Assets/UI_icons/report.png" id="7_yjmfj"]
+[ext_resource type="StyleBox" uid="uid://crifnmi8wtamd" path="res://Assets/premade_tres/UI_rounded.tres" id="9_c4v55"]
 [ext_resource type="LabelSettings" uid="uid://8l0lq0rj13y2" path="res://Assets/premade_tres/main_font.tres" id="10_456rr"]
+[ext_resource type="LabelSettings" uid="uid://b4bvehfuqfhsi" path="res://Assets/premade_tres/huge_font.tres" id="10_c4v55"]
 [ext_resource type="LabelSettings" uid="uid://cauv8wfe6rf4a" path="res://Assets/premade_tres/S_normal_font.tres" id="10_l30ei"]
 [ext_resource type="StyleBox" uid="uid://xax7fr6fi2r2" path="res://Assets/premade_tres/UI_secondary_style.tres" id="10_y20qt"]
 [ext_resource type="Texture2D" uid="uid://yorslv4bnklj" path="res://Assets/UI_icons/happy.png" id="12_l30ei"]
-[ext_resource type="StyleBox" uid="uid://dhjjcji0bv2vj" path="res://Assets/premade_tres/UI_aside_style.tres" id="13_456rr"]
 [ext_resource type="Texture2D" uid="uid://w4b1jpe8apuw" path="res://Assets/UI_icons/people.png" id="13_y20qt"]
 [ext_resource type="Texture2D" uid="uid://ccmmwy4vhxedm" path="res://Assets/UI_icons/day.png" id="14_456rr"]
+[ext_resource type="StyleBox" uid="uid://bmsre3tq7140b" path="res://Assets/premade_tres/UI_main_style.tres" id="17_c4v55"]
 [ext_resource type="Texture2D" uid="uid://cr0hbwv7wyo7t" path="res://Assets/UI_icons/zoom.png" id="17_jh6ek"]
 [ext_resource type="Texture2D" uid="uid://ceyy0isys1v5e" path="res://Assets/UI_icons/zoom-out.png" id="18_c4v55"]
 [ext_resource type="FontFile" uid="uid://fx1fb2lo1821" path="res://Assets/other/Verdana-Bold.ttf" id="18_ruk67"]
@@ -399,10 +401,10 @@ script = ExtResource("2_c7bke")
 
 [node name="close_button" type="Button" parent="Menu"]
 layout_mode = 0
-offset_left = 88.0
-offset_top = -40.0
-offset_right = 117.0
-offset_bottom = 46.0
+offset_left = 128.0
+offset_top = -51.0
+offset_right = 168.0
+offset_bottom = 75.0
 rotation = 1.5708
 tooltip_text = "ID: 2"
 focus_mode = 0
@@ -443,10 +445,10 @@ libraries = {
 
 [node name="Build" type="TextureButton" parent="Menu"]
 layout_mode = 2
-offset_left = 512.0
-offset_top = 16.0
-offset_right = 624.0
-offset_bottom = 128.0
+offset_left = 416.0
+offset_top = 9.0
+offset_right = 512.0
+offset_bottom = 105.0
 tooltip_text = "Építés"
 texture_normal = ExtResource("2_k5w2u")
 ignore_texture_size = true
@@ -458,7 +460,7 @@ anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -40.0
+offset_bottom = 40.0
 grow_horizontal = 2
 grow_vertical = 0
 text = "Új épület"
@@ -468,10 +470,10 @@ vertical_alignment = 1
 
 [node name="Report" type="TextureButton" parent="Menu"]
 layout_mode = 2
-offset_left = 72.0
-offset_top = 16.0
-offset_right = 184.0
-offset_bottom = 128.0
+offset_left = 256.0
+offset_top = 9.0
+offset_right = 352.0
+offset_bottom = 105.0
 tooltip_text = "Építés"
 mouse_default_cursor_shape = 2
 texture_normal = ExtResource("7_yjmfj")
@@ -484,7 +486,7 @@ anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -40.0
+offset_bottom = 40.0
 grow_horizontal = 2
 grow_vertical = 0
 text = "Jelentés"
@@ -494,10 +496,10 @@ vertical_alignment = 1
 
 [node name="Simulate_1" type="TextureButton" parent="Menu"]
 layout_mode = 2
-offset_left = 856.0
-offset_top = 8.0
-offset_right = 968.0
-offset_bottom = 120.0
+offset_left = 672.0
+offset_top = 9.0
+offset_right = 784.0
+offset_bottom = 121.0
 tooltip_text = "1 nap szimulálása"
 mouse_default_cursor_shape = 2
 texture_normal = ExtResource("4_ug47o")
@@ -510,7 +512,8 @@ anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -40.0
+offset_top = -16.0
+offset_bottom = 24.0
 grow_horizontal = 2
 grow_vertical = 0
 text = "+ 1 nap"
@@ -521,10 +524,10 @@ autowrap_mode = 3
 
 [node name="Simulate_10" type="TextureButton" parent="Menu"]
 layout_mode = 2
-offset_left = 960.0
-offset_top = 8.0
-offset_right = 1072.0
-offset_bottom = 120.0
+offset_left = 800.0
+offset_top = 9.0
+offset_right = 912.0
+offset_bottom = 121.0
 tooltip_text = "10 nap szimulálása"
 mouse_default_cursor_shape = 2
 texture_normal = ExtResource("4_ug47o")
@@ -537,7 +540,8 @@ anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -40.0
+offset_top = -16.0
+offset_bottom = 24.0
 grow_horizontal = 2
 grow_vertical = 0
 text = "+ 10 nap"
@@ -585,7 +589,7 @@ grow_vertical = 2
 layout_mode = 2
 theme_override_constants/h_separation = 21
 theme_override_constants/v_separation = 40
-columns = 7
+columns = 1024
 
 [node name="UI_building_sample" type="TextureButton" parent="Menu/Build_menu/Scroll/Grid"]
 visible = false
@@ -682,7 +686,7 @@ offset_right = -56.0
 offset_bottom = -7.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/panel = ExtResource("13_456rr")
+theme_override_styles/panel = ExtResource("9_c4v55")
 
 [node name="Grid" type="GridContainer" parent="Menu/Report_menu/Scroll"]
 layout_mode = 2
@@ -709,7 +713,7 @@ offset_bottom = -90.0
 grow_horizontal = 2
 grow_vertical = 0
 text = "Adó bevétel:"
-label_settings = ExtResource("10_456rr")
+label_settings = ExtResource("10_c4v55")
 vertical_alignment = 1
 autowrap_mode = 3
 
@@ -726,7 +730,7 @@ offset_bottom = -58.0
 grow_horizontal = 2
 grow_vertical = 0
 text = "Épületek:"
-label_settings = ExtResource("10_456rr")
+label_settings = ExtResource("10_c4v55")
 vertical_alignment = 1
 autowrap_mode = 3
 
@@ -743,7 +747,7 @@ offset_bottom = -20.0
 grow_horizontal = 2
 grow_vertical = 0
 text = "Boldogság:"
-label_settings = ExtResource("10_456rr")
+label_settings = ExtResource("10_c4v55")
 vertical_alignment = 1
 autowrap_mode = 3
 
@@ -760,7 +764,7 @@ offset_bottom = -90.0
 grow_horizontal = 2
 grow_vertical = 0
 text = "0"
-label_settings = ExtResource("10_456rr")
+label_settings = ExtResource("10_c4v55")
 vertical_alignment = 1
 autowrap_mode = 3
 
@@ -777,7 +781,7 @@ offset_bottom = -58.0
 grow_horizontal = 2
 grow_vertical = 0
 text = "0"
-label_settings = ExtResource("10_456rr")
+label_settings = ExtResource("10_c4v55")
 vertical_alignment = 1
 autowrap_mode = 3
 
@@ -794,7 +798,7 @@ offset_bottom = -20.0
 grow_horizontal = 2
 grow_vertical = 0
 text = "0"
-label_settings = ExtResource("10_456rr")
+label_settings = ExtResource("10_c4v55")
 vertical_alignment = 1
 autowrap_mode = 3
 
@@ -811,7 +815,7 @@ offset_bottom = -103.0
 grow_horizontal = 2
 grow_vertical = 0
 text = "Panaszok:"
-label_settings = ExtResource("10_456rr")
+label_settings = ExtResource("10_c4v55")
 vertical_alignment = 1
 autowrap_mode = 3
 
@@ -828,38 +832,10 @@ offset_bottom = -71.0
 grow_horizontal = 2
 grow_vertical = 0
 text = "1db"
-label_settings = ExtResource("10_456rr")
+label_settings = ExtResource("10_c4v55")
 horizontal_alignment = 2
 vertical_alignment = 1
 autowrap_mode = 3
-
-[node name="Report" type="Panel" parent="."]
-visible = false
-anchors_preset = 12
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_top = -145.0
-offset_bottom = 327.0
-grow_horizontal = 2
-grow_vertical = 0
-theme_override_styles/panel = SubResource("StyleBoxFlat_k4eo3")
-
-[node name="Anim" type="AnimationPlayer" parent="Report"]
-libraries = {
-&"": SubResource("AnimationLibrary_bo1nx")
-}
-
-[node name="Back" type="TextureButton" parent="Report"]
-layout_mode = 0
-offset_left = 8.0
-offset_top = 144.0
-offset_right = 63.0
-offset_bottom = 272.0
-mouse_default_cursor_shape = 2
-texture_normal = ExtResource("4_bjgi8")
-ignore_texture_size = true
-stretch_mode = 5
 
 [node name="Info" type="Panel" parent="."]
 anchors_preset = 9
@@ -871,10 +847,10 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_k4eo3")
 
 [node name="close_button" type="Button" parent="Info"]
 layout_mode = 0
-offset_left = 168.0
-offset_top = 96.0
-offset_right = 197.0
-offset_bottom = 182.0
+offset_left = 187.0
+offset_top = 145.0
+offset_right = 235.0
+offset_bottom = 280.0
 rotation = 3.14159
 tooltip_text = "ID: 2"
 focus_mode = 0
@@ -1105,7 +1081,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/panel = ExtResource("13_456rr")
+theme_override_styles/panel = ExtResource("9_c4v55")
 
 [node name="_name" type="Label" parent="Info/Scroll/Grid/UI_building_sample"]
 layout_mode = 1
@@ -1116,7 +1092,7 @@ offset_top = 50.0
 offset_bottom = 40.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/normal = ExtResource("13_456rr")
+theme_override_styles/normal = ExtResource("9_c4v55")
 text = "Energetika modrenizizálás"
 label_settings = ExtResource("10_l30ei")
 horizontal_alignment = 1
@@ -1132,7 +1108,7 @@ offset_top = 90.0
 offset_bottom = 64.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/normal = ExtResource("13_456rr")
+theme_override_styles/normal = ExtResource("9_c4v55")
 text = "700M HUF"
 label_settings = ExtResource("3_guah6")
 horizontal_alignment = 1
@@ -1286,25 +1262,25 @@ scale = Vector2(0.04, 0.04)
 texture = ExtResource("14_456rr")
 
 [node name="Cam" type="Panel" parent="."]
-self_modulate = Color(1, 1, 1, 0)
 anchors_preset = 11
 anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -48.0
-offset_right = -15.0
-offset_bottom = -525.0
+offset_left = -96.0
+offset_top = 8.0
+offset_right = -37.0
+offset_bottom = -522.0
 grow_horizontal = 0
 grow_vertical = 2
 scale = Vector2(1.5, 1.5)
-theme_override_styles/panel = SubResource("StyleBoxFlat_ug47o")
+theme_override_styles/panel = ExtResource("17_c4v55")
 
 [node name="out" type="TextureButton" parent="Cam"]
 layout_mode = 0
-offset_left = -37.0
-offset_top = 11.0
-offset_right = -16.0
-offset_bottom = 32.0
+offset_left = 5.33338
+offset_top = 5.33333
+offset_right = 55.3334
+offset_bottom = 55.3333
 tooltip_text = "Zoom in"
 mouse_default_cursor_shape = 2
 texture_normal = ExtResource("17_jh6ek")
@@ -1313,33 +1289,15 @@ stretch_mode = 0
 
 [node name="in" type="TextureButton" parent="Cam"]
 layout_mode = 0
-offset_left = -10.6667
-offset_top = 10.6667
-offset_right = 10.3333
-offset_bottom = 31.6667
+offset_left = 5.33334
+offset_top = 64.0
+offset_right = 55.3333
+offset_bottom = 114.0
 tooltip_text = "Zoom out"
 mouse_default_cursor_shape = 2
 texture_normal = ExtResource("18_c4v55")
 ignore_texture_size = true
 stretch_mode = 0
-
-[node name="zoom" type="Label" parent="Cam"]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = -1.121
-anchor_top = 0.043
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -11.007
-offset_top = 31.711
-offset_right = -6.0
-offset_bottom = -27.0
-grow_horizontal = 2
-grow_vertical = 0
-text = "100%"
-label_settings = ExtResource("3_guah6")
-horizontal_alignment = 1
-autowrap_mode = 3
 
 [node name="Warning" type="Panel" parent="."]
 visible = false

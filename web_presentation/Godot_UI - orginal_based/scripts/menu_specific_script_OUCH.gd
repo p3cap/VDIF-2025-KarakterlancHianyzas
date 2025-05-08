@@ -13,10 +13,6 @@ func _ready():
 		$Build_menu.visible = true)
 	$Build_menu/Back.pressed.connect(func():
 		$Build_menu.visible = false)
-	$Report.pressed.connect(func():
-		$"../Report/Anim".play_backwards("close"))
-	$"../Report/Back".pressed.connect(func():
-		$"../Report/Anim".play("close"))
 	$Simulate_1.pressed.connect(func():
 		main.simulate_days(1))
 	$Simulate_10.pressed.connect(func():

@@ -31,9 +31,11 @@ func warn(msg):
 	$Warning/msg.text = msg
 	$Warning/Anim.play("warn")
 
-func action(msg):
+func action(msg, accept_text, descline_test):
 	$Warning/msg.text = msg
 	$Warning/Anim.play("event")
+	$Warning/Accept.text = accept_text
+	$Warning/Decline.text = descline_test
 	await Global.disaster
 	$Warning/Anim.play_backwards("event")
 	
@@ -45,7 +47,6 @@ func _process(delta):
 	$Values/citizens.text = str(Data.user_data["citizens"])
 	$Values/day.text = str(Data.user_data["day"])+"."
 	
-	$Cam/zoom.text = str(snapped(Global.zoom,0.1))+"%"
 	
 	if not Global.selected: return
 	$Info/bld_name.text = Global.selected.bld_name

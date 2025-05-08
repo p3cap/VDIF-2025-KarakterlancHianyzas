@@ -18,6 +18,6 @@ func _unhandled_input(event):
 func _process(delta):
 	zoom = Vector2(Global.zoom/100,Global.zoom/100)
 	if Input.is_action_just_pressed("zoom_in"):
-		Global.zoom *= 1.1
+		Global.zoom *= 1.2
 	elif Input.is_action_just_pressed("zoom_out"):
-		Global.zoom *= 0.9
+		Global.zoom *= 0.8

@@ -67,14 +67,15 @@ func random_disaster():
 		for bld in user_data["buildings"]:
 			if randi_range(1,2) == 2:
 				damaged_builds.append(bld)
-		UI.action("Természeti katasztrófa: "+str(disaster.dst_name)+". Javási költség: "+Global.format_number(len(damaged_builds)*500))
+		var fix_cost = Global.format_number(len(damaged_builds)*100)
+		UI.action("Természeti katasztrófa: "+str(disaster.dst_name),"Javítás: "+fix_cost,str(len(damaged_builds))+"db épület újraépítése")
 		var action = await Global.disaster
 		if action:
-			user_data["currency_M"] -= len(damaged_builds)*1000
+			user_data["currency_M"] -= len(damaged_builds)*100
 		else:
 			for e in user_data["buildings"]:
 				if e in damaged_builds:
-					user_data["buildings"][e].finish_days += 200
+					user_data["buildings"][e].finish_days += 100
 			$Map.load_map()
 
 func simulate_days(days):
@@ -102,5 +103,5 @@ func simulate_days(days):
 		
 	
 	if user_data["currency_M"] <= 0:
-		UI.action("Csődbe mentél. Újra kezded?")
+		UI.action("Csődbe mentél.","újra kezdés","újra kezdés")
 		
