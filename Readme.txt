@@ -1,7 +1,7 @@
 ==== Külön Díjjat nyert a webes prezentációval =====
 
 # VDIV Karakterlanc Hiányzás
-Vadász Dénes Informatika Verseny
+Vadász Dénes Informatika Verseny (https://infoverseny.uni-miskolc.hu)
  
 csapatnév: <karakterlánc hiányzás>
 
