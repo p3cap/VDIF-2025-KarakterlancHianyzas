@@ -1,9 +1,0 @@
-[gd_resource type="LabelSettings" load_steps=2 format=3 uid="uid://cmyf0kya8mcke"]
-
-[ext_resource type="FontFile" uid="uid://fx1fb2lo1821" path="res://Assets/other/Verdana-Bold.ttf" id="1_rtpnf"]
-
-[resource]
-font = ExtResource("1_rtpnf")
-font_size = 18
-outline_size = 2
-outline_color = Color(0, 0, 0, 1)
