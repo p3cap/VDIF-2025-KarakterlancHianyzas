@@ -1,7 +1,9 @@
-# VDIF KarakterlancHiányzás
+==== Külön Díjjat nyert =====
+
+# VDIV KarakterlancHiányzás
 Vadász Dénes Informatika Verseny
  
-*csapatnév*: <karakterlánc hiányzás> csapat
+*csapatnév*: <karakterlánc hiányzás>
 
 *iskola:* BMSZC Puskás Tivadar Távközlési és Informatikai Technikum
 
@@ -9,11 +11,9 @@ Vadász Dénes Informatika Verseny
 
 *Felkészítő tanár és elérhetősége:* Zámbó Dominik, zambo.dominik@puskas.hu
 
-*Fejlesztői környezet:* Python 3
+*Fejlesztői környezet:* Visual Studio
 
 *feladat rövid leírása:* város építő szimuláció program és adatkimutatások
 
 ### *Használat:*
 - _**main.py**_ elindításával a program már fut is!
-- a szimuláció elkezdéséhez
-- mentett szimuációs adatok mappájának neve: *saves*
