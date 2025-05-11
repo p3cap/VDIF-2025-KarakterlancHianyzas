@@ -46,7 +46,7 @@ def open_menu(menu, desc=""):
 	
 
 if __name__ == "__main__":
-	with open("README.md", encoding="UTF-8") as file:
+	with open("Readme.md", encoding="UTF-8") as file:
 		for e in file.readlines(): 
 			print(e)
 	while not events.checkEnd():
